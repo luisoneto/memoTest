@@ -12,7 +12,7 @@ public class CardRotate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-     
+
     }
     void Update()
     {
@@ -42,3 +42,4 @@ public class CardRotate : MonoBehaviour
         this.transform.rotation = finalRotation;
         isRotated = true;
     }
+}
