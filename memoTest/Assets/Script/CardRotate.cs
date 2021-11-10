@@ -38,7 +38,7 @@ public class CardRotate : MonoBehaviour
 
     IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
 
         if (duration > 0f)
         {
