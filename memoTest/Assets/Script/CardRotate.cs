@@ -57,7 +57,7 @@ public class CardRotate : MonoBehaviour
         this.transform.rotation = finalRotation;
     }
 
-    IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
+    public IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
         if (duration > 0f)
         {
