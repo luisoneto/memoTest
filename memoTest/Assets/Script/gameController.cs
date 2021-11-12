@@ -10,8 +10,8 @@ public class gameController : MonoBehaviour
     public bool isRotated;
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
-    public Quaternion showPosition = Quaternion.Euler(0, 0, -180);
-    public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);
+    public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
+    public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
     private int cartasRotadas = 0;
     Vector3 cardsPosition = new Vector3(-3.0f, 0.5f, 1.0f);
     Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -1.0f);
@@ -70,17 +70,17 @@ public class gameController : MonoBehaviour
             if (idsCartas[0] == idsCartas[1])
             {
                 // no funciona bien todavia
-                StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 1.0f * Time.deltaTime, cartasElegidas[0].transform.position.z), 3.0f, cartasElegidas[0]));
-                StartCoroutine(UpOverTime(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 1.0f * Time.deltaTime, cartasElegidas[0].transform.position.z), 3.0f, cartasElegidas[1]));
+                StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 1.0f , cartasElegidas[0].transform.position.z), 7.0f, cartasElegidas[0]));
+                StartCoroutine(UpOverTime(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 1.0f , cartasElegidas[1].transform.position.z), 7.0f, cartasElegidas[1]));
             }
             if(idsCartas[0] != idsCartas[1])
             {
 
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
-                //no funciona bien todavia 
-                StartCoroutine(RotateOverTime2(cartasElegidas[0].transform.rotation, hidePosition, 1.0f , cartasElegidas[0]));
-                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 1f  , cartasElegidas[1]));
+                StartCoroutine(RotateOverTime(showPosition, hidePosition, 1.0f , cartasElegidas[0]));
+                StartCoroutine(RotateOverTime(showPosition, hidePosition, 1.0f, cartasElegidas[1]));
+
             }
 
 
@@ -104,8 +104,9 @@ public class gameController : MonoBehaviour
         }
     }
 
-    public IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
+    IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
+        
         if (duration > 0f)
         {
             float startTime = Time.time;
@@ -116,7 +117,7 @@ public class gameController : MonoBehaviour
             {
                 float progress = (Time.time - startTime) / duration;
                 // progress will equal 0 at startTime, 1 at endTime.
-                this.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
+                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
                 yield return null;
             }
         }
@@ -124,25 +125,6 @@ public class gameController : MonoBehaviour
         isRotated = true;
     }
 
-    public IEnumerator RotateOverTime2(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
-    {
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
-                this.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
-        isRotated = true;
-    }
     public IEnumerator UpOverTime(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
     {
         if (duration > 0f)
@@ -155,11 +137,32 @@ public class gameController : MonoBehaviour
             {
                 float progress = (Time.time - startTime) / duration;
                 // progress will equal 0 at startTime, 1 at endTime.
-                this.transform.position = Vector3.Slerp(originalRotation, finalRotation, progress);
+                card.transform.position = Vector3.Slerp(originalRotation, finalRotation, progress);
                 yield return null;
             }
         }
         card.transform.position = finalRotation;
         isRotated = true;
+    }
+
+    IEnumerator ShowCards2(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
+    {
+        if (duration > 0f)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            card.transform.rotation = originalRotation;
+            yield return null;
+            while (Time.time < endTime )
+            {
+                
+                // progress will equal 0 at startTime, 1 at endTime.
+                //this.transform.rotation = RotateTowards(originalRotation, finalRotation, progress);
+                card.transform.rotation = Quaternion.RotateTowards(originalRotation, finalRotation, 1.0f);
+
+                yield return null;
+            }
+        }
+        card.transform.rotation = finalRotation;
     }
 }
