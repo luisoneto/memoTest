@@ -7,6 +7,7 @@ public class gameController : MonoBehaviour
 {
     public AudioSource popSound;
     public int terminoDeRotar = 0;
+    public int cartasAcertadas;
     public float speed = 1.0f;
     public int[] idsCartas = new int[2];
     public bool isRotated;
@@ -76,9 +77,11 @@ public class gameController : MonoBehaviour
                 StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 7.0f, cartasElegidas[0].transform.position.z), 1.0f, cartasElegidas[0]));
                 StartCoroutine(UpOverTime2(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 7.0f, cartasElegidas[1].transform.position.z), 1.0f, cartasElegidas[1]));
                 cartasRotadas = 0;
+                cartasAcertadas++;
                 cartasElegidas.Clear();
+                CheckGameState();
             }
-            if(idsCartas[0] != idsCartas[1])
+            else 
             {
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
@@ -170,6 +173,7 @@ public class gameController : MonoBehaviour
             }
         }
         card.transform.position = finalRotation;
+        Destroy(card.transform.gameObject);
         
         
     }
@@ -192,5 +196,15 @@ public class gameController : MonoBehaviour
             }
         }
         card.transform.position = finalRotation;
+        Destroy(card.transform.gameObject);
+    }
+
+    void CheckGameState()
+    {
+        // si esta en facil cartasAcertadas tiene que ser 4.
+        //if(cartasAcertadas == 4 && dificultad == "facil")
+        //{
+        //    Debug.Log("ganaste");
+        //}
     }
 }
