@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class gameController : MonoBehaviour
 {
+    public AudioSource popSound;
+    public int terminoDeRotar = 0;
     public float speed = 1.0f;
-    int[] idsCartas = new int[2];
+    public int[] idsCartas = new int[2];
     public bool isRotated;
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
-    private int cartasRotadas = 0;
+    public int cartasRotadas = 0;
     Vector3 cardsPosition = new Vector3(-3.0f, 0.5f, 1.0f);
     Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -1.0f);
 
@@ -57,10 +59,12 @@ public class gameController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-                    StartCoroutine(cartaElegida.RotateOverTime(cartaElegida.rotation1, cartaElegida.rotation2, 1.0f, hit.transform.gameObject));
+                    StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 1.0f, hit.transform.gameObject));
                     idsCartas[cartasRotadas] = cartaElegida.id;
                     cartasElegidas.Add(cartaElegida.transform.gameObject);
-                    ++cartasRotadas;
+
+                    //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
+                    Invoke("sumarCarta", 1.0f);
                 }
             }
         }
@@ -69,17 +73,19 @@ public class gameController : MonoBehaviour
         {
             if (idsCartas[0] == idsCartas[1])
             {
-                // no funciona bien todavia
-                StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 1.0f , cartasElegidas[0].transform.position.z), 7.0f, cartasElegidas[0]));
-                StartCoroutine(UpOverTime(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 1.0f , cartasElegidas[1].transform.position.z), 7.0f, cartasElegidas[1]));
+                StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 7.0f, cartasElegidas[0].transform.position.z), 1.0f, cartasElegidas[0]));
+                StartCoroutine(UpOverTime2(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 7.0f, cartasElegidas[1].transform.position.z), 1.0f, cartasElegidas[1]));
+                cartasRotadas = 0;
+                cartasElegidas.Clear();
             }
             if(idsCartas[0] != idsCartas[1])
             {
-
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
                 StartCoroutine(RotateOverTime(showPosition, hidePosition, 1.0f , cartasElegidas[0]));
-                StartCoroutine(RotateOverTime(showPosition, hidePosition, 1.0f, cartasElegidas[1]));
+                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 1.0f, cartasElegidas[1]));
+                //Resetear la lista
+                cartasElegidas.Clear();
 
             }
 
@@ -87,7 +93,10 @@ public class gameController : MonoBehaviour
         }
     }
 
-
+    void sumarCarta()
+    {
+        ++cartasRotadas;
+    }
     void RandomizeCardsPosition()
     {
         System.Random _random = new System.Random();
@@ -106,7 +115,7 @@ public class gameController : MonoBehaviour
 
     IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
-        
+        yield return new WaitForSeconds(1);
         if (duration > 0f)
         {
             float startTime = Time.time;
@@ -116,17 +125,58 @@ public class gameController : MonoBehaviour
             while (Time.time < endTime)
             {
                 float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
                 card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
                 yield return null;
             }
         }
         card.transform.rotation = finalRotation;
-        isRotated = true;
     }
 
-    public IEnumerator UpOverTime(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
+    IEnumerator RotateOverTime2(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
+        yield return new WaitForSeconds(1);
+        if (duration > 0f)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            card.transform.rotation = originalRotation;
+            yield return null;
+            while (Time.time < endTime)
+            {
+                float progress = (Time.time - startTime) / duration;
+                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
+                yield return null;
+            }
+        }
+        card.transform.rotation = finalRotation;
+    }
+
+    //cambiar nombre de metodo , desaparece no se va para arriba.
+    IEnumerator UpOverTime(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
+    {
+        //yield return new WaitForSeconds(2);
+        if (duration > 0f)
+        {
+            popSound.Play();
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            card.transform.position = originalRotation;
+            yield return null;
+            while (Time.time < endTime)
+            {
+                float progress = (Time.time - startTime) / duration;
+                card.transform.localScale = Vector3.Lerp(card.transform.localScale, new Vector3(0,0,0), progress);
+                yield return null;
+            }
+        }
+        card.transform.position = finalRotation;
+        
+        
+    }
+
+    IEnumerator UpOverTime2(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
+    {
+        popSound.Play();
         if (duration > 0f)
         {
             float startTime = Time.time;
@@ -136,33 +186,11 @@ public class gameController : MonoBehaviour
             while (Time.time < endTime)
             {
                 float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
-                card.transform.position = Vector3.Slerp(originalRotation, finalRotation, progress);
+                card.transform.localScale = Vector3.Slerp(card.transform.localScale, new Vector3(0, 0, 0), progress);
+                //card.transform.position = Vector3.Slerp(originalRotation, finalRotation, progress);
                 yield return null;
             }
         }
         card.transform.position = finalRotation;
-        isRotated = true;
-    }
-
-    IEnumerator ShowCards2(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
-    {
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime )
-            {
-                
-                // progress will equal 0 at startTime, 1 at endTime.
-                //this.transform.rotation = RotateTowards(originalRotation, finalRotation, progress);
-                card.transform.rotation = Quaternion.RotateTowards(originalRotation, finalRotation, 1.0f);
-
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
     }
 }

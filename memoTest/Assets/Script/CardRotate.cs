@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CardRotate : MonoBehaviour
 {
+    public int cartasRotadas;
     public int id;
-    public bool isRotated;
     public float speed = 1.0f;
     public Quaternion rotation1 = Quaternion.Euler(0, 0, 0);
     public Quaternion rotation2 = Quaternion.Euler(0, 0, 180);
@@ -15,7 +15,6 @@ public class CardRotate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         StartCoroutine(ShowCards(rotationShowCard, rotationHideCard, 1f / speed));
     }
     //void Update()
@@ -74,7 +73,6 @@ public class CardRotate : MonoBehaviour
             }
         }
         card.transform.rotation = finalRotation;
-        isRotated = true;
     }
 }
 
