@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class gameController : MonoBehaviour
 {
+    public AudioSource cardSlide2;
+    public AudioSource cardSlide;
     public AudioSource popSound;
     public int terminoDeRotar = 0;
     public int cartasAcertadas;
     public float speed = 1.0f;
-    public int[] idsCartas = new int[2];
+    //public int[] idsCartas = new int[2];
     public bool isRotated;
+    public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
@@ -60,12 +63,12 @@ public class gameController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-                    StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 1.0f, hit.transform.gameObject));
+                    StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
                     idsCartas[cartasRotadas] = cartaElegida.id;
-                    cartasElegidas.Add(cartaElegida.transform.gameObject);
-
+                    cartasElegidas.Add(cartaElegida.transform.gameObject);                   
                     //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
-                    Invoke("sumarCarta", 1.0f);
+                    Invoke("reproducirCartaSlide", 0.35f);
+                    Invoke("sumarCarta", 0.5f);
                 }
             }
         }
@@ -85,17 +88,29 @@ public class gameController : MonoBehaviour
             {
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
-                StartCoroutine(RotateOverTime(showPosition, hidePosition, 1.0f , cartasElegidas[0]));
-                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 1.0f, cartasElegidas[1]));
+                StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f , cartasElegidas[0]));
+                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
+                Invoke("reproducirCartaSlide2", 1.35f);
                 //Resetear la lista
                 cartasElegidas.Clear();
 
             }
 
-
+            for(int i = 0; i < idsCartas.Count; ++i)
+            {
+                idsCartas[i] = 0;
+            }
         }
     }
 
+    void reproducirCartaSlide2()
+    {
+        cardSlide2.Play();
+    }
+    void reproducirCartaSlide()
+    {
+        cardSlide.Play();
+    }
     void sumarCarta()
     {
         ++cartasRotadas;
