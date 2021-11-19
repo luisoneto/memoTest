@@ -117,7 +117,7 @@ public class gameController : MonoBehaviour
         if (MainMenuController.Dificultad == 2)
         {
             int count = 0;
-            for (int z = 0; z < 4 ; z++)
+            for (int z = 0; z < 3 ; z++)
             {
                 
                 for (int a = 0; a < 4; a++)
@@ -133,6 +133,27 @@ public class gameController : MonoBehaviour
                 }
 
              }
+        }
+
+        if (MainMenuController.Dificultad == 3)
+        {
+            int count = 0;
+            for (int z = 0; z < 4; z++)
+            {
+
+                for (int a = 0; a < 4; a++)
+                {
+                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
+                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
+                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
+                    count++;
+                    if (count == 8)
+                    {
+                        count = 0;
+                    }
+                }
+
+            }
         }
 
     }
