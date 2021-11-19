@@ -21,30 +21,14 @@ public class gameController : MonoBehaviour
     public int cartasRotadas = 0;
     Vector3 cardsPosition = new Vector3(-3.0f, 0.5f, 1.0f);
     Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -1.0f);
+    Vector3 cardsPositionc = new Vector3(-3.0f, 0.5f, 2.5f);
+    Vector3 cardsPositiond = new Vector3(-3.0f, 0.5f, -2.0f);
 
     // Start is called before the first frame update
     void Start()
     {
-        RandomizeCardsPosition();
+        CardsPosition();
 
-        // public static Object Instantiate(Object original, Vector3 position, Quaternion rotation);
-        // For para instanciar en dificultad facil - En el eje x se separan por 2, en en el Z por 0.5f.
-
-        for (int z = 0; z < cartas.Count; z++)
-        {
-            if (z < 4)
-            {
-                var carta = Instantiate(cartas[z], cardsPosition, showPosition);
-                cardsPosition = cardsPosition + new Vector3(2, 0, 0);
-            }
-
-            if (z >= 4)
-            {
-                var carta = Instantiate(cartas[z], cardsPositionb, showPosition);
-                cardsPositionb = cardsPositionb + new Vector3(2, 0, 0);
-            }
-
-        }
     }
 
     // Update is called once per frame
@@ -103,6 +87,52 @@ public class gameController : MonoBehaviour
         }
     }
 
+
+    void CardsPosition()
+    {
+        RandomizeCardsPosition();
+
+        // public static Object Instantiate(Object original, Vector3 position, Quaternion rotation);
+        // For para instanciar en dificultad facil - En el eje x se separan por 2, en en el Z por 1.0f.
+        // empiezan en el eje x en -3. /
+        
+        if(MainMenuController.Dificultad == 1)
+        {
+            for (int z = 0; z < cartas.Count; z++)
+            {
+                if (z < 4)
+                {
+                    var carta = Instantiate(cartas[z], cardsPosition, showPosition);
+                    cardsPosition = cardsPosition + new Vector3(2, 0, 0);
+                }
+
+                if (z >= 4)
+                {
+                    var carta = Instantiate(cartas[z], cardsPositionb, showPosition);
+                    cardsPositionb = cardsPositionb + new Vector3(2, 0, 0);
+                }
+            }
+        }
+
+        if (MainMenuController.Dificultad == 2)
+        {
+            for (int z = 0; z < cartas.Count; z++)
+            {
+                if (z < 4)
+                {
+                    var carta = Instantiate(cartas[z], cardsPosition, showPosition);
+                    cardsPosition = cardsPosition + new Vector3(2, 0, 0);
+                }
+
+                if (z >= 4)
+                {
+                    var carta = Instantiate(cartas[z], cardsPositionb, showPosition);
+                    cardsPositionb = cardsPositionb + new Vector3(2, 0, 0);
+                }
+            }
+        }
+
+    }
     void reproducirCartaSlide2()
     {
         cardSlide2.Play();
