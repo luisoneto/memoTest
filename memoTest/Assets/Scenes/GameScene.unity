@@ -563,6 +563,11 @@ MonoBehaviour:
   - {fileID: 47468393027098823, guid: 6dac19fee6f334c4c960b934ab39efac, type: 3}
   - {fileID: 2003603020722140656, guid: eff04a37ccf0b72468ff847a7471102c, type: 3}
   - {fileID: 3727479054951808394, guid: abd3f780056a62e4db2f76a65a86d4ba, type: 3}
+  CardsVectors:
+  - {x: -3, y: 0.5, z: 2.5}
+  - {x: -3, y: 0.5, z: 1}
+  - {x: -3, y: 0.5, z: -0.5}
+  - {x: -3, y: 0.5, z: -2}
   showPosition: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   hidePosition: {x: 0, y: 0, z: 0, w: 1}
   cartasRotadas: 0

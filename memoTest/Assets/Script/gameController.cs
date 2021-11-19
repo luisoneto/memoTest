@@ -16,17 +16,16 @@ public class gameController : MonoBehaviour
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
+    public List<Vector3> CardsVectors = new List<Vector3>();
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
     public int cartasRotadas = 0;
-    Vector3 cardsPositiona = new Vector3(-3.0f, 0.5f, 1);
-    Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -0.5f);
-    Vector3 cardsPositionc = new Vector3(-3.0f, 0.5f, 2.5f);
-    Vector3 cardsPositiond = new Vector3(-3.0f, 0.5f, -2.0f);
+
 
     // Start is called before the first frame update
     void Start()
     {
+        RandomizeCardsPosition();
         CardsPosition();
 
     }
@@ -90,46 +89,50 @@ public class gameController : MonoBehaviour
 
     void CardsPosition()
     {
-        RandomizeCardsPosition();
+
+
 
         // public static Object Instantiate(Object original, Vector3 position, Quaternion rotation);
         // For para instanciar en dificultad facil - En el eje x se separan por 2, en en el Z por 1.0f.
         // empiezan en el eje x en -3. /
         
-        if(MainMenuController.Dificultad == 1)
+
+        if (MainMenuController.Dificultad == 1)
         {
-            for (int z = 0; z < cartas.Count; z++)
+            int count = 0;
+            for (int z = 0; z < 2; z++)
             {
-                if (z < 4)
+
+                for (int a = 0; a < 4; a++)
                 {
-                    var carta = Instantiate(cartas[z], cardsPositiona, showPosition);
-                    cardsPositiona = cardsPositiona + new Vector3(2, 0, 0);
+                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
+                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
+                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
+                    count++;
                 }
 
-                if (z >= 4)
-                {
-                    var carta = Instantiate(cartas[z], cardsPositionb, showPosition);
-                    cardsPositionb = cardsPositionb + new Vector3(2, 0, 0);
-                }
             }
         }
 
         if (MainMenuController.Dificultad == 2)
         {
+            int count = 0;
             for (int z = 0; z < 4 ; z++)
             {
-                if (z < 4)
+                
+                for (int a = 0; a < 4; a++)
                 {
-                    var carta = Instantiate(cartas[z], cardsPositiona, showPosition);
-                    cardsPositiona = cardsPositiona + new Vector3(2, 0, 0);
+                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
+                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
+                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
+                    count++;
+                    if(count == 8)
+                    {
+                        count = 0;
+                    }
                 }
 
-                if (z >= 4)
-                {
-                    var carta = Instantiate(cartas[z], cardsPositionb, showPosition);
-                    cardsPositionb = cardsPositionb + new Vector3(2, 0, 0);
-                }
-            }
+             }
         }
 
     }
