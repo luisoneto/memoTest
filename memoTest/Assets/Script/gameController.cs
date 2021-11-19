@@ -19,8 +19,8 @@ public class gameController : MonoBehaviour
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
     public int cartasRotadas = 0;
-    Vector3 cardsPosition = new Vector3(-3.0f, 0.5f, 1.0f);
-    Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -1.0f);
+    Vector3 cardsPositiona = new Vector3(-3.0f, 0.5f, 1);
+    Vector3 cardsPositionb = new Vector3(-3.0f, 0.5f, -0.5f);
     Vector3 cardsPositionc = new Vector3(-3.0f, 0.5f, 2.5f);
     Vector3 cardsPositiond = new Vector3(-3.0f, 0.5f, -2.0f);
 
@@ -102,8 +102,8 @@ public class gameController : MonoBehaviour
             {
                 if (z < 4)
                 {
-                    var carta = Instantiate(cartas[z], cardsPosition, showPosition);
-                    cardsPosition = cardsPosition + new Vector3(2, 0, 0);
+                    var carta = Instantiate(cartas[z], cardsPositiona, showPosition);
+                    cardsPositiona = cardsPositiona + new Vector3(2, 0, 0);
                 }
 
                 if (z >= 4)
@@ -116,12 +116,12 @@ public class gameController : MonoBehaviour
 
         if (MainMenuController.Dificultad == 2)
         {
-            for (int z = 0; z < cartas.Count; z++)
+            for (int z = 0; z < 4 ; z++)
             {
                 if (z < 4)
                 {
-                    var carta = Instantiate(cartas[z], cardsPosition, showPosition);
-                    cardsPosition = cardsPosition + new Vector3(2, 0, 0);
+                    var carta = Instantiate(cartas[z], cardsPositiona, showPosition);
+                    cardsPositiona = cardsPositiona + new Vector3(2, 0, 0);
                 }
 
                 if (z >= 4)
