@@ -60,8 +60,9 @@ public class gameController : MonoBehaviour
         {
             if (idsCartas[0] == idsCartas[1])
             {
-                StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 7.0f, cartasElegidas[0].transform.position.z), 1.0f, cartasElegidas[0]));
-                StartCoroutine(UpOverTime2(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 7.0f, cartasElegidas[1].transform.position.z), 1.0f, cartasElegidas[1]));
+                // La dejo comentada, por si se usa después.
+                //StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 7.0f, cartasElegidas[0].transform.position.z), 1.0f, cartasElegidas[0]));
+                //StartCoroutine(UpOverTime2(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 7.0f, cartasElegidas[1].transform.position.z), 1.0f, cartasElegidas[1]));
                 cartasRotadas = 0;
                 cartasAcertadas++;
                 cartasElegidas.Clear();
@@ -117,7 +118,7 @@ public class gameController : MonoBehaviour
         if (MainMenuController.Dificultad == 2)
         {
             int count = 0;
-            for (int z = 0; z < 3 ; z++)
+            for (int z = 0; z < 4 ; z++)
             {
                 
                 for (int a = 0; a < 4; a++)
@@ -270,10 +271,15 @@ public class gameController : MonoBehaviour
 
     void CheckGameState()
     {
-        // si esta en facil cartasAcertadas tiene que ser 4.
-        //if(cartasAcertadas == 4 && dificultad == "facil")
-        //{
-        //    Debug.Log("ganaste");
-        //}
+       if(MainMenuController.Dificultad == 1 && cartasAcertadas == 4)
+        {
+            Debug.Log("Ganaste perrin!");
+        }
+
+        if (MainMenuController.Dificultad == 2 && cartasAcertadas == 8)
+        {
+            Debug.Log("Ganaste perrin!");
+        }
+
     }
 }
