@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
+    private bool cartaAcertada;
     private int puntos;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
@@ -35,8 +36,7 @@ public class gameController : MonoBehaviour
         puntos = 10;
     }
     void Update()
-    {
-        Debug.Log(cartas[0].GetComponent<Collider>().enabled);
+    {        
         //cantidad de puntos que tiene el jugador.
         var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
         totalPoints.text = "Puntos: " + puntos;
@@ -59,23 +59,29 @@ public class gameController : MonoBehaviour
                         cartasElegidas.Add(cartaElegida.transform.gameObject);
                         //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
                         Invoke("reproducirCartaSlide", 0.35f);
-                        Invoke("sumarCarta", 0.5f);
+                        Invoke("sumarCarta", 0.3f);
                     }
 
                 }
             }
         }
-
+        // se llama muchas veces entonces me suma muchos puntos de una.
         if (cartasRotadas == 2)
         {
+
             if (idsCartas[0] == idsCartas[1])
             {
+                for (int i = 0; i < idsCartas.Count; ++i)
+                {
+                    idsCartas[i] = 0;
+                }
+                puntos = puntos + 3;
                 // desactivo el collider para que no le puedas hacer click de vuelta.
                 cartasElegidas[0].GetComponent<Collider>().enabled = false;
                 cartasElegidas[1].GetComponent<Collider>().enabled = false;
-                cartasRotadas = 0;
-                cartasAcertadas++;
                 cartasElegidas.Clear();
+                cartasRotadas = 0;
+                cartasAcertadas++;               
                 CheckGameState();
                 PointsGained();
             }
@@ -89,16 +95,12 @@ public class gameController : MonoBehaviour
                 cartasElegidas.Clear();
 
             }
-
-            for(int i = 0; i < idsCartas.Count; ++i)
-            {
-                idsCartas[i] = 0;
-            }
         }
     }
 
     void PointsGained()
     {
+        
         var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
         pointText.enabled = true;
         Vector3 OriginalPosition = pointText.transform.localPosition;
@@ -260,11 +262,13 @@ public class gameController : MonoBehaviour
             }
         }
         // esto está aca para que se sumen los puntos a la vez que desaparezca la animación de los puntos.
-        puntos = puntos + 3;
+        
+        
     }
 
     IEnumerator DisappearOverTime(Vector3 originalScale,float duration, TMP_Text text, Vector3 originalPosition)
     {
+        
         yield return new WaitForSeconds(0.40f);
         if (duration > 0f)
         {
@@ -315,4 +319,5 @@ public class gameController : MonoBehaviour
             cartasClones[carta].GetComponent<Collider>().enabled = true;
         }
     }
+
 }
