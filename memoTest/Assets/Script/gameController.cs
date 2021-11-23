@@ -96,7 +96,7 @@ public class gameController : MonoBehaviour
         pointText.enabled = true;
         Vector3 OriginalPosition = pointText.transform.localPosition;
         StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
-        StartCoroutine(DisappearOverTime(pointText.transform.localScale,0.5f, pointText,OriginalPosition));
+        StartCoroutine(DisappearOverTime(pointText.transform.localScale,1.0f, pointText,OriginalPosition));
     }
     void CardsPosition()
     {
@@ -239,7 +239,7 @@ public class gameController : MonoBehaviour
     {
         if (duration > 0f)
         {
-            popSound.Play();
+
             float startTime = Time.time;
             float endTime = startTime + duration;
             text.transform.localPosition = originalPosition;
@@ -258,6 +258,7 @@ public class gameController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         if (duration > 0f)
         {
+            popSound.Play();
             float startTime = Time.time;
             float endTime = startTime + duration;
             //card.transform.position = originalRotation;
