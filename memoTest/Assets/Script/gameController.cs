@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
+    private int puntos;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;
@@ -23,22 +24,20 @@ public class gameController : MonoBehaviour
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
     public int cartasRotadas = 0;
 
-
     // Start is called before the first frame update
     void Start()
     {
         RandomizeCardsPosition();
         CardsPosition();
-
+        puntos = 10;
     }
-
-    // Update is called once per frame
-
-
-    // 1. Que se de vuelta una carta, que mientras hay una carta dada vuelta , podes dar vuelta una carta más. Si las cartas tienen el mismo id entonces Desaparecen
-    // si no vuelven a estar boca abajo
     void Update()
     {
+        //cantidad de puntos que tiene el jugador.
+        var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
+        totalPoints.text = "Puntos: " + puntos;
+
+
         if (cartasRotadas < 2)
         {
             if (Input.GetMouseButtonDown(0))
@@ -48,12 +47,17 @@ public class gameController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-                    StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
-                    idsCartas[cartasRotadas] = cartaElegida.id;
-                    cartasElegidas.Add(cartaElegida.transform.gameObject);                   
-                    //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
-                    Invoke("reproducirCartaSlide", 0.35f);
-                    Invoke("sumarCarta", 0.5f);
+                    // si el collider es null que no haga nada, si no tira error.
+                    if(cartaElegida != null)
+                    {
+                        StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
+                        idsCartas[cartasRotadas] = cartaElegida.id;
+                        cartasElegidas.Add(cartaElegida.transform.gameObject);
+                        //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
+                        Invoke("reproducirCartaSlide", 0.35f);
+                        Invoke("sumarCarta", 0.5f);
+                    }
+
                 }
             }
         }
@@ -62,14 +66,14 @@ public class gameController : MonoBehaviour
         {
             if (idsCartas[0] == idsCartas[1])
             {
-                // La dejo comentada, por si se usa después.
-                //StartCoroutine(UpOverTime(cartasElegidas[0].transform.position, new Vector3(cartasElegidas[0].transform.position.x, 7.0f, cartasElegidas[0].transform.position.z), 1.0f, cartasElegidas[0]));
-                //StartCoroutine(UpOverTime2(cartasElegidas[1].transform.position, new Vector3(cartasElegidas[1].transform.position.x, 7.0f, cartasElegidas[1].transform.position.z), 1.0f, cartasElegidas[1]));
+                // desactivo el collider para que no le puedas hacer click de vuelta.
+                cartasElegidas[0].GetComponent<Collider>().enabled = false;
+                cartasElegidas[1].GetComponent<Collider>().enabled = false;
                 cartasRotadas = 0;
                 cartasAcertadas++;
                 cartasElegidas.Clear();
                 CheckGameState();
-                PointsGainedAppears();
+                PointsGained();
             }
             else 
             {
@@ -78,7 +82,6 @@ public class gameController : MonoBehaviour
                 StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f , cartasElegidas[0]));
                 StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
                 Invoke("reproducirCartaSlide2", 1.35f);
-                //Resetear la lista
                 cartasElegidas.Clear();
 
             }
@@ -90,7 +93,7 @@ public class gameController : MonoBehaviour
         }
     }
 
-    void PointsGainedAppears()
+    void PointsGained()
     {
         var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
         pointText.enabled = true;
@@ -250,12 +253,14 @@ public class gameController : MonoBehaviour
                 text.transform.localPosition = Vector3.Lerp(text.transform.localPosition, new Vector3(text.transform.localPosition.x,60,0), progress);
                 yield return null;
             }
-        }     
+        }
+        // esto está aca para que se sumen los puntos a la vez que desaparezca la animación de los puntos.
+        puntos = puntos + 3;
     }
 
     IEnumerator DisappearOverTime(Vector3 originalScale,float duration, TMP_Text text, Vector3 originalPosition)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.40f);
         if (duration > 0f)
         {
             popSound.Play();
