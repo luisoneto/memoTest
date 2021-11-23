@@ -16,6 +16,7 @@ public class gameController : MonoBehaviour
     public float speed = 1.0f;
     //public int[] idsCartas = new int[2];
     public bool isRotated;
+    List<GameObject> cartasClones = new List<GameObject>();
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
@@ -25,14 +26,17 @@ public class gameController : MonoBehaviour
     public int cartasRotadas = 0;
 
     // Start is called before the first frame update
+    // Bugs a arreglar : Me está dejando dar vuelta todas las cartas que quiero...
     void Start()
     {
+        StartCoroutine(EnableCardsColliders());
         RandomizeCardsPosition();
         CardsPosition();
         puntos = 10;
     }
     void Update()
     {
+        Debug.Log(cartas[0].GetComponent<Collider>().enabled);
         //cantidad de puntos que tiene el jugador.
         var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
         totalPoints.text = "Puntos: " + puntos;
@@ -121,6 +125,7 @@ public class gameController : MonoBehaviour
                 {
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
+                    cartasClones.Add(carta);
                     CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
                     count++;
                 }
@@ -293,5 +298,21 @@ public class gameController : MonoBehaviour
             Debug.Log("Ganaste perrin!");
         }
 
+    }
+
+    IEnumerator EnableCardsColliders()
+    {
+        for (int carta = 0; carta < cartas.Count; carta++)
+        {
+            cartas[carta].GetComponent<Collider>().enabled = false;
+        }
+
+        yield return new WaitForSeconds(3);
+
+
+        for (int carta = 0; carta < cartas.Count; carta++)
+        {
+            cartasClones[carta].GetComponent<Collider>().enabled = true;
+        }
     }
 }

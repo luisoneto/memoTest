@@ -17,26 +17,11 @@ public class CardRotate : MonoBehaviour
     {
         StartCoroutine(ShowCards(rotationShowCard, rotationHideCard, 1f / speed));
     }
-    //void Update()
-    //{
-    //    //void OnMouseOver()
-    //    //{
-    //    //    if (Input.GetMouseButtonDown(0))
-    //    //    {
-    //    //        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    //        RaycastHit hit;
-    //    //        if (Physics.Raycast(ray, out hit, 100))
-    //    //        {
-    //    //            StartCoroutine(RotateOverTime(rotation1, rotation2, 1f / speed, hit.transform.gameObject));
-    //    //        }
-                
-    //    //    }
-    //    //}           
-    //}
- 
+
 
     IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
     {
+
         yield return new WaitForSeconds(2);
 
         if (duration > 0f)

@@ -54,6 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -109,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d117660247a5b448351ada6050f0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cartasRotadas: 0
   id: 2
-  isRotated: 0
   speed: 1
   rotation1: {x: 0, y: 0, z: 0, w: 1}
   rotation2: {x: 0, y: 0, z: 1, w: -0.00000004371139}
@@ -168,6 +169,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
