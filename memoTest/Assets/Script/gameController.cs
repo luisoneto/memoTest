@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
@@ -67,6 +69,7 @@ public class gameController : MonoBehaviour
                 cartasAcertadas++;
                 cartasElegidas.Clear();
                 CheckGameState();
+                PointsGainedAppears();
             }
             else 
             {
@@ -87,7 +90,14 @@ public class gameController : MonoBehaviour
         }
     }
 
-
+    void PointsGainedAppears()
+    {
+        var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
+        pointText.enabled = true;
+        Vector3 OriginalPosition = pointText.transform.localPosition;
+        StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
+        StartCoroutine(DisappearOverTime(pointText.transform.localScale,0.5f, pointText,OriginalPosition));
+    }
     void CardsPosition()
     {
 
@@ -225,48 +235,44 @@ public class gameController : MonoBehaviour
     }
 
     //cambiar nombre de metodo , desaparece no se va para arriba.
-    IEnumerator UpOverTime(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
+    IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, TMP_Text text)
     {
-        //yield return new WaitForSeconds(2);
         if (duration > 0f)
         {
             popSound.Play();
             float startTime = Time.time;
             float endTime = startTime + duration;
-            card.transform.position = originalRotation;
+            text.transform.localPosition = originalPosition;
             yield return null;
             while (Time.time < endTime)
             {
                 float progress = (Time.time - startTime) / duration;
-                card.transform.localScale = Vector3.Lerp(card.transform.localScale, new Vector3(0,0,0), progress);
+                text.transform.localPosition = Vector3.Lerp(text.transform.localPosition, new Vector3(text.transform.localPosition.x,60,0), progress);
                 yield return null;
             }
-        }
-        card.transform.position = finalRotation;
-        Destroy(card.transform.gameObject);
-        
-        
+        }     
     }
 
-    IEnumerator UpOverTime2(Vector3 originalRotation, Vector3 finalRotation, float duration, GameObject card)
+    IEnumerator DisappearOverTime(Vector3 originalScale,float duration, TMP_Text text, Vector3 originalPosition)
     {
-        popSound.Play();
+        yield return new WaitForSeconds(0.25f);
         if (duration > 0f)
         {
             float startTime = Time.time;
             float endTime = startTime + duration;
-            card.transform.position = originalRotation;
+            //card.transform.position = originalRotation;
             yield return null;
             while (Time.time < endTime)
             {
                 float progress = (Time.time - startTime) / duration;
-                card.transform.localScale = Vector3.Slerp(card.transform.localScale, new Vector3(0, 0, 0), progress);
-                //card.transform.position = Vector3.Slerp(originalRotation, finalRotation, progress);
+                text.transform.localScale = Vector3.Slerp(text.transform.localScale, new Vector3(0, 0, 0), progress);
                 yield return null;
             }
         }
-        card.transform.position = finalRotation;
-        Destroy(card.transform.gameObject);
+
+        text.enabled = false;
+        text.transform.localPosition = originalPosition;
+        text.transform.localScale = originalScale;
     }
 
     void CheckGameState()
