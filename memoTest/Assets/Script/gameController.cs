@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
-    private bool cartaAcertada;
+    private bool rotatedCards;
     private int puntos;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
@@ -42,7 +42,47 @@ public class gameController : MonoBehaviour
         totalPoints.text = "Puntos: " + puntos;
 
 
-        if (cartasRotadas < 2)
+        if (cartasRotadas == 2)
+        {
+            rotatedCards = true;
+
+            if (idsCartas[0] == idsCartas[1])
+            {
+
+                puntos = puntos + 3;
+                // desactivo el collider para que no le puedas hacer click de vuelta.
+                Invoke("DisableCollider", 1.0f);
+                //cartasElegidas[0].GetComponent<Collider>().enabled = false;
+                //cartasElegidas[1].GetComponent<Collider>().enabled = false;
+                //cartasElegidas.Clear();
+                cartasAcertadas++;
+                CheckGameState();
+                PointsGained();
+            }
+            else
+            {
+                Debug.Log("Estas equivocadisimo.");
+                cartasRotadas = 0;
+                StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
+                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
+                Invoke("reproducirCartaSlide2", 1.35f);
+
+                // Le devuelvo el collider, si son incorrectas podes volver a elegirlas.
+                Invoke("ReturnCollider", 1.0f);
+
+                rotatedCards = false;
+
+
+            }
+
+            for (int i = 0; i < idsCartas.Count; ++i)
+            {
+                idsCartas[i] = 0;
+            }
+        }
+
+
+        if (!rotatedCards)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -55,6 +95,9 @@ public class gameController : MonoBehaviour
                     if(cartaElegida != null)
                     {
                         StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
+                        // Les saco el collider para que no las puedas dar vuelta otra vez
+                        cartaElegida.GetComponent<Collider>().enabled = false;
+
                         idsCartas[cartasRotadas] = cartaElegida.id;
                         cartasElegidas.Add(cartaElegida.transform.gameObject);
                         //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
@@ -62,40 +105,11 @@ public class gameController : MonoBehaviour
                         Invoke("sumarCarta", 0.3f);
                     }
 
+
                 }
             }
         }
-        // se llama muchas veces entonces me suma muchos puntos de una.
-        if (cartasRotadas == 2)
-        {
-
-            if (idsCartas[0] == idsCartas[1])
-            {
-                for (int i = 0; i < idsCartas.Count; ++i)
-                {
-                    idsCartas[i] = 0;
-                }
-                puntos = puntos + 3;
-                // desactivo el collider para que no le puedas hacer click de vuelta.
-                cartasElegidas[0].GetComponent<Collider>().enabled = false;
-                cartasElegidas[1].GetComponent<Collider>().enabled = false;
-                cartasElegidas.Clear();
-                cartasRotadas = 0;
-                cartasAcertadas++;               
-                CheckGameState();
-                PointsGained();
-            }
-            else 
-            {
-                Debug.Log("Estas equivocadisimo.");
-                cartasRotadas = 0;
-                StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f , cartasElegidas[0]));
-                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
-                Invoke("reproducirCartaSlide2", 1.35f);
-                cartasElegidas.Clear();
-
-            }
-        }
+       
     }
 
     void PointsGained()
@@ -104,6 +118,7 @@ public class gameController : MonoBehaviour
         var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
         pointText.enabled = true;
         Vector3 OriginalPosition = pointText.transform.localPosition;
+        cartasRotadas = 0;
         StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
         StartCoroutine(DisappearOverTime(pointText.transform.localScale,1.0f, pointText,OriginalPosition));
     }
@@ -288,6 +303,7 @@ public class gameController : MonoBehaviour
         text.enabled = false;
         text.transform.localPosition = originalPosition;
         text.transform.localScale = originalScale;
+        rotatedCards = false;
     }
 
     void CheckGameState()
@@ -318,6 +334,20 @@ public class gameController : MonoBehaviour
         {
             cartasClones[carta].GetComponent<Collider>().enabled = true;
         }
+    }
+
+    void ReturnCollider()
+    {
+        cartasElegidas[0].GetComponent<Collider>().enabled = true;
+        cartasElegidas[1].GetComponent<Collider>().enabled = true;
+        cartasElegidas.Clear();
+    }
+
+    void DisableCollider()
+    {
+        cartasElegidas[0].GetComponent<Collider>().enabled = false;
+        cartasElegidas[1].GetComponent<Collider>().enabled = false;
+        cartasElegidas.Clear();
     }
 
 }
