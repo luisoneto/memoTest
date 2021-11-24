@@ -17,7 +17,7 @@ public class gameController : MonoBehaviour
     public float speed = 1.0f;
     //public int[] idsCartas = new int[2];
     public bool isRotated;
-    List<GameObject> cartasClones = new List<GameObject>();
+    public List<GameObject> cartasClones = new List<GameObject>();
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
     public List<GameObject> cartas = new List<GameObject>();
@@ -48,7 +48,6 @@ public class gameController : MonoBehaviour
 
             if (idsCartas[0] == idsCartas[1])
             {
-
                 puntos = puntos + 3;
                 // desactivo el collider para que no le puedas hacer click de vuelta.
                 Invoke("DisableCollider", 1.0f);
@@ -56,6 +55,7 @@ public class gameController : MonoBehaviour
                 CheckGameState();
                 PointsGained();
             }
+
             else
             {
                 Debug.Log("Estas equivocadisimo.");
@@ -67,8 +67,6 @@ public class gameController : MonoBehaviour
                 Invoke("ReturnCollider", 0.5f);
 
                 rotatedCards = false;
-
-
             }
 
             for (int i = 0; i < idsCartas.Count; ++i)
@@ -139,6 +137,7 @@ public class gameController : MonoBehaviour
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
                     cartasClones.Add(carta);
+                    cartasClones[count].GetComponent<CardRotate>().cardNumber = count;
                     CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
                     count++;
                 }
@@ -149,6 +148,7 @@ public class gameController : MonoBehaviour
         if (MainMenuController.Dificultad == 2)
         {
             int count = 0;
+            int cardNumber = 0;
             for (int z = 0; z < 4 ; z++)
             {
                 
@@ -157,8 +157,10 @@ public class gameController : MonoBehaviour
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
                     cartasClones.Add(carta);
+                    cartasClones[count].GetComponent<CardRotate>().cardNumber = cardNumber;
                     CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
                     count++;
+                    cardNumber++;
                     if(count == 8)
                     {
                         count = 0;
@@ -344,9 +346,28 @@ public class gameController : MonoBehaviour
 
     void DisableCollider()
     {
-        cartasElegidas[0].GetComponent<Collider>().enabled = false;
-        cartasElegidas[1].GetComponent<Collider>().enabled = false;
-        cartasElegidas.Clear();
+
+        // La razón por la cual hago esto, es porque cuando las cartas se empiezan a repetir, con el metodo anterior
+        // deshabilitaba el collider de todas las cartas con el id, entonces si habia 4 azules se deshabilitaban las otras dos
+        // mas allá de que no estén seleccionadas, agregué una variable cardNumber que es unica y personal de cada carta
+        // asi solamente le deshabilito el collider a las cartas que necesito.
+
+        int count = 0;
+        for(int i = 0; i < cartasClones.Count; i++)
+        {
+            if(cartasClones[i].GetComponent<CardRotate>().cardNumber == cartasElegidas[count].GetComponent<CardRotate>().cardNumber)
+            {
+                cartasClones[i].GetComponent<Collider>().enabled = false;
+                count++;
+                i = 0;
+            }
+
+            if(count == 2)
+            {
+                cartasElegidas.Clear();
+                break;
+            }
+        }
     }
 
 }
