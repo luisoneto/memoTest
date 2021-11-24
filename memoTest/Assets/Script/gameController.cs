@@ -52,9 +52,6 @@ public class gameController : MonoBehaviour
                 puntos = puntos + 3;
                 // desactivo el collider para que no le puedas hacer click de vuelta.
                 Invoke("DisableCollider", 1.0f);
-                //cartasElegidas[0].GetComponent<Collider>().enabled = false;
-                //cartasElegidas[1].GetComponent<Collider>().enabled = false;
-                //cartasElegidas.Clear();
                 cartasAcertadas++;
                 CheckGameState();
                 PointsGained();
@@ -66,9 +63,8 @@ public class gameController : MonoBehaviour
                 StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
                 StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
                 Invoke("reproducirCartaSlide2", 1.35f);
-
                 // Le devuelvo el collider, si son incorrectas podes volver a elegirlas.
-                Invoke("ReturnCollider", 1.0f);
+                Invoke("ReturnCollider", 0.5f);
 
                 rotatedCards = false;
 
@@ -160,6 +156,7 @@ public class gameController : MonoBehaviour
                 {
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
+                    cartasClones.Add(carta);
                     CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
                     count++;
                     if(count == 8)
@@ -322,6 +319,8 @@ public class gameController : MonoBehaviour
 
     IEnumerator EnableCardsColliders()
     {
+
+
         for (int carta = 0; carta < cartas.Count; carta++)
         {
             cartas[carta].GetComponent<Collider>().enabled = false;
