@@ -30,9 +30,14 @@ public class gameController : MonoBehaviour
     // Bugs a arreglar : Me está dejando dar vuelta todas las cartas que quiero...
     void Start()
     {
+        // EnableCardsColliders es para que cuando empieza la partida y te muestra las cartas, no te deje darlas vueltas cuando les hagas click entonces
+        // les saco el collider un ratito para que no puedas interactuar con ellas.
         StartCoroutine(EnableCardsColliders());
+
         RandomizeCardsPosition();
+
         CardsPosition();
+
         puntos = 10;
     }
     void Update()
@@ -54,6 +59,8 @@ public class gameController : MonoBehaviour
                 cartasAcertadas++;
                 CheckGameState();
                 PointsGained();
+                // Activo los colliders otra vez una vez que las animaciones de las cartas terminen.
+                Invoke("ActiveColliders", 1.0f);
             }
 
             else
@@ -157,7 +164,7 @@ public class gameController : MonoBehaviour
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
                     cartasClones.Add(carta);
-                    cartasClones[count].GetComponent<CardRotate>().cardNumber = cardNumber;
+                    cartasClones[cardNumber].GetComponent<CardRotate>().cardNumber = cardNumber;
                     CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
                     count++;
                     cardNumber++;
@@ -275,9 +282,6 @@ public class gameController : MonoBehaviour
                 yield return null;
             }
         }
-        // esto está aca para que se sumen los puntos a la vez que desaparezca la animación de los puntos.
-        
-        
     }
 
     IEnumerator DisappearOverTime(Vector3 originalScale,float duration, TMP_Text text, Vector3 originalPosition)
@@ -302,7 +306,6 @@ public class gameController : MonoBehaviour
         text.enabled = false;
         text.transform.localPosition = originalPosition;
         text.transform.localScale = originalScale;
-        rotatedCards = false;
     }
 
     void CheckGameState()
@@ -323,15 +326,15 @@ public class gameController : MonoBehaviour
     {
 
 
-        for (int carta = 0; carta < cartas.Count; carta++)
+        for (int carta = 0; carta < cartasClones.Count; carta++)
         {
-            cartas[carta].GetComponent<Collider>().enabled = false;
+            cartasClones[carta].GetComponent<Collider>().enabled = false;
         }
 
         yield return new WaitForSeconds(3);
 
 
-        for (int carta = 0; carta < cartas.Count; carta++)
+        for (int carta = 0; carta < cartasClones.Count; carta++)
         {
             cartasClones[carta].GetComponent<Collider>().enabled = true;
         }
@@ -370,4 +373,8 @@ public class gameController : MonoBehaviour
         }
     }
 
+    void ActiveColliders()
+    {
+        rotatedCards = false;
+    }
 }
