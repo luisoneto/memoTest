@@ -26,8 +26,6 @@ public class gameController : MonoBehaviour
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);   
     public int cartasRotadas = 0;
 
-    // Start is called before the first frame update
-    // Bugs a arreglar : Me está dejando dar vuelta todas las cartas que quiero...
     void Start()
     {
         // EnableCardsColliders es para que cuando empieza la partida y te muestra las cartas, no te deje darlas vueltas cuando les hagas click entonces
@@ -49,24 +47,27 @@ public class gameController : MonoBehaviour
 
         if (cartasRotadas == 2)
         {
+            bool correctAnswer = false;
             rotatedCards = true;
 
             if (idsCartas[0] == idsCartas[1])
             {
-                puntos = puntos + 3;
+                correctAnswer = true;
+                //puntos = puntos + 3;
                 // desactivo el collider para que no le puedas hacer click de vuelta.
-                Invoke("DisableCollider", 1.0f);
-                cartasAcertadas++;
+                Invoke("DisableCollider", 0.75f);
+                PointsLogic(correctAnswer);
                 CheckGameState();
-                PointsGained();
                 // Activo los colliders otra vez una vez que las animaciones de las cartas terminen.
                 Invoke("ActiveColliders", 1.0f);
             }
 
             else
             {
+                //puntos = puntos - 1;
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
+                PointsLogic(correctAnswer);
                 StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
                 StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
                 Invoke("reproducirCartaSlide2", 1.35f);
@@ -98,10 +99,9 @@ public class gameController : MonoBehaviour
                         StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
                         // Les saco el collider para que no las puedas dar vuelta otra vez
                         cartaElegida.GetComponent<Collider>().enabled = false;
-
                         idsCartas[cartasRotadas] = cartaElegida.id;
                         cartasElegidas.Add(cartaElegida.transform.gameObject);
-                        //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
+                        //delay a sumarCarta para que haya un tiempo de espera cuando tenes las cartas correctas.
                         Invoke("reproducirCartaSlide", 0.35f);
                         Invoke("sumarCarta", 0.3f);
                     }
@@ -113,15 +113,32 @@ public class gameController : MonoBehaviour
        
     }
 
-    void PointsGained()
+    void PointsLogic(bool answer)
     {
-        
-        var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
-        pointText.enabled = true;
-        Vector3 OriginalPosition = pointText.transform.localPosition;
-        cartasRotadas = 0;
-        StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
-        StartCoroutine(DisappearOverTime(pointText.transform.localScale,1.0f, pointText,OriginalPosition));
+        if(answer)
+        {
+            puntos = puntos + 3;
+            var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
+            pointText.enabled = true;
+            Vector3 OriginalPosition = pointText.transform.localPosition;
+            cartasRotadas = 0;
+            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
+            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
+
+        }
+        else
+        {
+            puntos = puntos - 1;
+            var pointText = GameObject.Find("text_lostpoint").GetComponent<TMP_Text>();
+            pointText.enabled = true;
+            Vector3 OriginalPosition = pointText.transform.localPosition;
+            cartasRotadas = 0;
+            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
+            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
+
+        }
+
+
     }
     void CardsPosition()
     {
@@ -310,7 +327,9 @@ public class gameController : MonoBehaviour
 
     void CheckGameState()
     {
-       if(MainMenuController.Dificultad == 1 && cartasAcertadas == 4)
+        cartasAcertadas++;
+
+        if (MainMenuController.Dificultad == 1 && cartasAcertadas == 4)
         {
             Debug.Log("Ganaste perrin!");
         }
