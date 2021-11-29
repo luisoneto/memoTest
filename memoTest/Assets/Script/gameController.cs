@@ -82,30 +82,35 @@ public class gameController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-                    // si el collider es null que no haga nada, si no tira error.
-                    if(cartaElegida != null)
-                    {
-                        StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
-                        // Les saco el collider para que no las puedas dar vuelta otra vez
-                        cartaElegida.GetComponent<Collider>().enabled = false;
-
-                        idsCartas[cartasRotadas] = cartaElegida.id;
-                        cartasElegidas.Add(cartaElegida.transform.gameObject);
-                        //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
-                        Invoke("reproducirCartaSlide", 0.35f);
-                        Invoke("sumarCarta", 0.3f);
-                    }
-
-
-                }
+                ClickOnCard();
             }
         }
        
+    }
+
+    void ClickOnCard()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
+            // si el collider es null que no haga nada, si no tira error.
+            if (cartaElegida != null)
+            {
+                StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
+                // Les saco el collider para que no las puedas dar vuelta otra vez
+                cartaElegida.GetComponent<Collider>().enabled = false;
+
+                idsCartas[cartasRotadas] = cartaElegida.id;
+                cartasElegidas.Add(cartaElegida.transform.gameObject);
+                //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
+                Invoke("reproducirCartaSlide", 0.35f);
+                Invoke("sumarCarta", 0.3f);
+            }
+
+
+        }
     }
 
     void PointsGained()
