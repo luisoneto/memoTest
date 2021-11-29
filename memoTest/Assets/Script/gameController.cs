@@ -7,16 +7,11 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
-    private bool rotatedCards;
     private int puntos;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;
-    public int terminoDeRotar = 0;
     public int cartasAcertadas;
-    public float speed = 1.0f;
-    //public int[] idsCartas = new int[2];
-    public bool isRotated;
     public List<GameObject> cartasClones = new List<GameObject>();
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
@@ -45,36 +40,34 @@ public class gameController : MonoBehaviour
         totalPoints.text = "Puntos: " + puntos;
 
 
+        // habia un if(!rotatedcards) antes de este if , pongo esto para no olvidarme.
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            ClickOnCard();
+        }
+
+
         if (cartasRotadas == 2)
         {
             bool correctAnswer = false;
-            rotatedCards = true;
-
             if (idsCartas[0] == idsCartas[1])
             {
                 correctAnswer = true;
-                //puntos = puntos + 3;
-                // desactivo el collider para que no le puedas hacer click de vuelta.
-                Invoke("DisableCollider", 0.75f);
+                ChangeCardsState();
                 PointsLogic(correctAnswer);
                 CheckGameState();
-                // Activo los colliders otra vez una vez que las animaciones de las cartas terminen.
-                Invoke("ActiveColliders", 1.0f);
             }
 
             else
             {
-                //puntos = puntos - 1;
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
                 PointsLogic(correctAnswer);
                 StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
                 StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
                 Invoke("reproducirCartaSlide2", 1.35f);
-                // Le devuelvo el collider, si son incorrectas podes volver a elegirlas.
-                Invoke("ReturnCollider", 0.5f);
-
-                rotatedCards = false;
+                ChangeCardsStateToZero();
             }
 
             for (int i = 0; i < idsCartas.Count; ++i)
@@ -83,65 +76,43 @@ public class gameController : MonoBehaviour
             }
         }
 
-
-        if (!rotatedCards)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-                    // si el collider es null que no haga nada, si no tira error.
-                    if(cartaElegida != null)
-                    {
-                        StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
-                        // Les saco el collider para que no las puedas dar vuelta otra vez
-                        cartaElegida.GetComponent<Collider>().enabled = false;
-                        idsCartas[cartasRotadas] = cartaElegida.id;
-                        cartasElegidas.Add(cartaElegida.transform.gameObject);
-                        //delay a sumarCarta para que haya un tiempo de espera cuando tenes las cartas correctas.
-                        Invoke("reproducirCartaSlide", 0.35f);
-                        Invoke("sumarCarta", 0.3f);
-                    }
-
-
-                }
-            }
-        }
+        
        
     }
 
-    //void ClickOnCard()
-    //{
-    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(ray, out hit))
-    //    {
-    //        CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-    //        // si el collider es null que no haga nada, si no tira error.
-    //        if (cartaElegida != null)
-    //        {
-    //            StartCoroutine(cartaElegida.RotateOverTime(hidePosition, showPosition, 0.5f, hit.transform.gameObject));
-    //            // Les saco el collider para que no las puedas dar vuelta otra vez
-    //            cartaElegida.GetComponent<Collider>().enabled = false;
+    void ClickOnCard()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
+            // si el collider es null que no haga nada, si no tira error.
 
-    //            idsCartas[cartasRotadas] = cartaElegida.id;
-    //            cartasElegidas.Add(cartaElegida.transform.gameObject);
-    //            //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
-    //            Invoke("reproducirCartaSlide", 0.35f);
-    //            Invoke("sumarCarta", 0.3f);
-    //        }
+            if(ExistTwoRotatedCards())
+            {
+                return;
+            }
+
+            if (cartaElegida != null && cartaElegida.state == 0)
+            {
+                cartaElegida.state = 2;
+                StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, hit.transform.gameObject, cartaElegida));
+                idsCartas[cartasRotadas] = cartaElegida.id;
+                cartasElegidas.Add(cartaElegida.transform.gameObject);
+                //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
+                Invoke("reproducirCartaSlide", 0.35f);
+                Invoke("sumarCarta", 0.3f);
+            }
 
 
-    //    }
-    //}
+        }
+    }
 
-    void PointsGained()
-=======
+
+
     void PointsLogic(bool answer)
->>>>>>> f5841af7625984c29e8a2f0ca3f1408eb38bec81
+
     {
         if(answer)
         {
@@ -310,7 +281,6 @@ public class gameController : MonoBehaviour
         card.transform.rotation = finalRotation;
     }
 
-    //cambiar nombre de metodo , desaparece no se va para arriba.
     IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, TMP_Text text)
     {
         if (duration > 0f)
@@ -387,14 +357,14 @@ public class gameController : MonoBehaviour
         }
     }
 
-    void ReturnCollider()
+    void ChangeCardsStateToZero()
     {
-        cartasElegidas[0].GetComponent<Collider>().enabled = true;
-        cartasElegidas[1].GetComponent<Collider>().enabled = true;
+        cartasElegidas[0].GetComponent<CardRotate>().state = 0;
+        cartasElegidas[1].GetComponent<CardRotate>().state = 0;
         cartasElegidas.Clear();
     }
 
-    void DisableCollider()
+    void ChangeCardsState()
     {
 
         // La razón por la cual hago esto, es porque cuando las cartas se empiezan a repetir, con el metodo anterior
@@ -407,7 +377,7 @@ public class gameController : MonoBehaviour
         {
             if(cartasClones[i].GetComponent<CardRotate>().cardNumber == cartasElegidas[count].GetComponent<CardRotate>().cardNumber)
             {
-                cartasClones[i].GetComponent<Collider>().enabled = false;
+                cartasClones[i].GetComponent<CardRotate>().state = 3;
                 count++;
                 i = 0;
             }
@@ -420,8 +390,43 @@ public class gameController : MonoBehaviour
         }
     }
 
-    void ActiveColliders()
+
+    public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card, CardRotate carta)
     {
-        rotatedCards = false;
+        if (duration > 0f)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            card.transform.rotation = originalRotation;
+            yield return null;
+            while (Time.time < endTime)
+            {
+                float progress = (Time.time - startTime) / duration;
+                // progress will equal 0 at startTime, 1 at endTime.
+                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
+                yield return null;
+            }
+        }
+        card.transform.rotation = finalRotation;
     }
+
+    bool ExistTwoRotatedCards()
+    {
+        int count = 0;
+        for (int i = 0; i < cartasClones.Count; i++)
+        {
+            if (cartasClones[i].GetComponent<CardRotate>().state == 2)
+            {
+                count++;
+            }
+        }
+            if (count == 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }  
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CardRotate : MonoBehaviour
 {
-    public int cartasRotadas;
+    //0 = oculta, 1 = rotando, 2 = rotada, 3 = encontrada 
+    public int state = 0;
     public int cardNumber;
     public int id;
     public float speed = 1.0f;
@@ -42,23 +43,6 @@ public class CardRotate : MonoBehaviour
         this.transform.rotation = finalRotation;
     }
 
-    public IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
-    {
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
-                this.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
-    }
+
 }
 
