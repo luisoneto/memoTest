@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardRotate : MonoBehaviour
 {
     public int cartasRotadas;
+    public int cardNumber;
     public int id;
     public float speed = 1.0f;
     public Quaternion rotation1 = Quaternion.Euler(0, 0, 0);
