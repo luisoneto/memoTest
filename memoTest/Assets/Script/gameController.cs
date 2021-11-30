@@ -64,16 +64,15 @@ public class gameController : MonoBehaviour
                 Debug.Log("Estas equivocadisimo.");
                 cartasRotadas = 0;
                 PointsLogic(correctAnswer);
-                StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
-                StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
+                RotateBothCards();
                 Invoke("reproducirCartaSlide2", 1.35f);
                 ChangeCardsStateToZero();
             }
 
-            for (int i = 0; i < idsCartas.Count; ++i)
-            {
-                idsCartas[i] = 0;
-            }
+            //for (int i = 0; i < idsCartas.Count; ++i)
+            //{
+            //    idsCartas[i] = 0;
+            //}
         }
 
         
@@ -96,20 +95,24 @@ public class gameController : MonoBehaviour
 
             if (cartaElegida != null && cartaElegida.state == 0)
             {
-                cartaElegida.state = 2;
                 StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, hit.transform.gameObject, cartaElegida));
                 idsCartas[cartasRotadas] = cartaElegida.id;
                 cartasElegidas.Add(cartaElegida.transform.gameObject);
                 //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
                 Invoke("reproducirCartaSlide", 0.35f);
                 Invoke("sumarCarta", 0.3f);
+                cartaElegida.state = 2;
             }
 
 
         }
     }
 
-
+    void RotateBothCards()
+    {
+        StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
+        StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
+    }
 
     void PointsLogic(bool answer)
 
@@ -366,12 +369,7 @@ public class gameController : MonoBehaviour
 
     void ChangeCardsState()
     {
-
-        // La razón por la cual hago esto, es porque cuando las cartas se empiezan a repetir, con el metodo anterior
-        // deshabilitaba el collider de todas las cartas con el id, entonces si habia 4 azules se deshabilitaban las otras dos
-        // mas allá de que no estén seleccionadas, agregué una variable cardNumber que es unica y personal de cada carta
-        // asi solamente le deshabilito el collider a las cartas que necesito.
-
+        // Pongo las cartas correctas en estado 3.
         int count = 0;
         for(int i = 0; i < cartasClones.Count; i++)
         {
