@@ -47,36 +47,18 @@ public class gameController : MonoBehaviour
             ClickOnCard();
         }
 
-
-        if (cartasRotadas == 2)
+        if(ExistTwoCardsInStateThree())
         {
-            bool correctAnswer = false;
-            if (idsCartas[0] == idsCartas[1])
+            if(CardsIdAreEquals())
             {
-                correctAnswer = true;
-                ChangeCardsState();
-                PointsLogic(correctAnswer);
+                PointsLogic(true);
                 CheckGameState();
             }
-
             else
             {
-                Debug.Log("Estas equivocadisimo.");
-                cartasRotadas = 0;
-                PointsLogic(correctAnswer);
-                RotateBothCards();
-                Invoke("reproducirCartaSlide2", 1.35f);
-                ChangeCardsStateToZero();
+                PointsLogic(false);
             }
-
-            //for (int i = 0; i < idsCartas.Count; ++i)
-            //{
-            //    idsCartas[i] = 0;
-            //}
-        }
-
-        
-       
+        }      
     }
 
     void ClickOnCard()
@@ -93,14 +75,8 @@ public class gameController : MonoBehaviour
                 return;
             }
 
-            if (cartaElegida != null && cartaElegida.state == 0)
+            if (cartaElegida != null && cartaElegida.state == 1)
             {
-                StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, hit.transform.gameObject, cartaElegida));
-                idsCartas[cartasRotadas] = cartaElegida.id;
-                cartasElegidas.Add(cartaElegida.transform.gameObject);
-                //delay a cartasRotadas++ para que haya un tiempo de espera cuando tenes las cartas correctas.
-                Invoke("reproducirCartaSlide", 0.35f);
-                Invoke("sumarCarta", 0.3f);
                 cartaElegida.state = 2;
             }
 
@@ -123,7 +99,6 @@ public class gameController : MonoBehaviour
             var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            cartasRotadas = 0;
             StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
 
@@ -134,7 +109,6 @@ public class gameController : MonoBehaviour
             var pointText = GameObject.Find("text_lostpoint").GetComponent<TMP_Text>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            cartasRotadas = 0;
             StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
 
@@ -413,7 +387,7 @@ public class gameController : MonoBehaviour
         int count = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().state == 2)
+            if (cartasClones[i].GetComponent<CardRotate>().state == 2 || cartasClones[i].GetComponent<CardRotate>().state == 4)
             {
                 count++;
             }
@@ -427,4 +401,42 @@ public class gameController : MonoBehaviour
                 return false;
             }
         }  
+
+    bool ExistTwoCardsInStateThree()
+    {
+        int count = 0;
+        for (int i = 0; i < cartasClones.Count; i++)
+        {
+            if (cartasClones[i].GetComponent<CardRotate>().state == 3)
+            {
+                cartasElegidas[count] = cartasClones[i];
+                count++;
+            }
+        }
+        if (count == 2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    bool CardsIdAreEquals()
+    {
+        if(cartasElegidas[0].GetComponent<CardRotate>().id == cartasElegidas[1].GetComponent<CardRotate>().id)
+        {
+            cartasElegidas[0].GetComponent<CardRotate>().state = 5;
+            cartasElegidas[1].GetComponent<CardRotate>().state = 5;
+            return true;
+        }
+        else
+        {
+            cartasElegidas[0].GetComponent<CardRotate>().state = 4;
+            cartasElegidas[1].GetComponent<CardRotate>().state = 4;
+            return false;
+        }
+    }
 }
+
