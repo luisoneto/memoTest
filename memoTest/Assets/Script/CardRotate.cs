@@ -9,8 +9,6 @@ public class CardRotate : MonoBehaviour
     public int cardNumber;
     public int id;
     public float speed = 1.0f;
-    public Quaternion rotation1 = Quaternion.Euler(0, 0, 0);
-    public Quaternion rotation2 = Quaternion.Euler(0, 0, 180);
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);
 
@@ -25,6 +23,15 @@ public class CardRotate : MonoBehaviour
         if(state == 2)
         {
             StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, this.transform.gameObject));
+        }
+
+        if(state == 4)
+        {
+            StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, this.transform.gameObject));
+        }
+        if(state == 5)
+        {
+            this.transform.position = transform.position;
         }
     }
     IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
@@ -47,6 +54,7 @@ public class CardRotate : MonoBehaviour
             }
         }
         this.transform.rotation = finalRotation;
+        state = 1;
     }
 
     public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
@@ -66,6 +74,27 @@ public class CardRotate : MonoBehaviour
             }
         }
         card.transform.rotation = finalRotation;
+        state = 3;
+    }
+
+    IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
+    {
+        yield return new WaitForSeconds(1);
+        if (duration > 0f)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            card.transform.rotation = originalRotation;
+            yield return null;
+            while (Time.time < endTime)
+            {
+                float progress = (Time.time - startTime) / duration;
+                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
+                yield return null;
+            }
+        }
+        card.transform.rotation = finalRotation;
+        state = 1;
     }
 
 }

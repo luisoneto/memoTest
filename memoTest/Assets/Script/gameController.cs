@@ -23,8 +23,8 @@ public class gameController : MonoBehaviour
 
     void Start()
     {
-        // EnableCardsColliders es para que cuando empieza la partida y te muestra las cartas, no te deje darlas vueltas cuando les hagas click entonces
-        // les saco el collider un ratito para que no puedas interactuar con ellas.
+        MainMenuController.Dificultad = 2;
+
         StartCoroutine(EnableCardsColliders());
 
         RandomizeCardsPosition();
@@ -35,12 +35,8 @@ public class gameController : MonoBehaviour
     }
     void Update()
     {        
-        //cantidad de puntos que tiene el jugador.
         var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
         totalPoints.text = "Puntos: " + puntos;
-
-
-        // habia un if(!rotatedcards) antes de este if , pongo esto para no olvidarme.
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -84,11 +80,6 @@ public class gameController : MonoBehaviour
         }
     }
 
-    void RotateBothCards()
-    {
-        StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, cartasElegidas[0]));
-        StartCoroutine(RotateOverTime2(showPosition, hidePosition, 0.5f, cartasElegidas[1]));
-    }
 
     void PointsLogic(bool answer)
 
@@ -121,9 +112,6 @@ public class gameController : MonoBehaviour
 
 
 
-        // public static Object Instantiate(Object original, Vector3 position, Quaternion rotation);
-        // For para instanciar en dificultad facil - En el eje x se separan por 2, en en el Z por 1.0f.
-        // empiezan en el eje x en -3. /
         
 
         if (MainMenuController.Dificultad == 1)
@@ -220,44 +208,6 @@ public class gameController : MonoBehaviour
         }
     }
 
-    IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
-    {
-        yield return new WaitForSeconds(1);
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
-    }
-
-    IEnumerator RotateOverTime2(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
-    {
-        yield return new WaitForSeconds(1);
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
-    }
-
     IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, TMP_Text text)
     {
         if (duration > 0f)
@@ -331,34 +281,6 @@ public class gameController : MonoBehaviour
         for (int carta = 0; carta < cartasClones.Count; carta++)
         {
             cartasClones[carta].GetComponent<Collider>().enabled = true;
-        }
-    }
-
-    void ChangeCardsStateToZero()
-    {
-        cartasElegidas[0].GetComponent<CardRotate>().state = 0;
-        cartasElegidas[1].GetComponent<CardRotate>().state = 0;
-        cartasElegidas.Clear();
-    }
-
-    void ChangeCardsState()
-    {
-        // Pongo las cartas correctas en estado 3.
-        int count = 0;
-        for(int i = 0; i < cartasClones.Count; i++)
-        {
-            if(cartasClones[i].GetComponent<CardRotate>().cardNumber == cartasElegidas[count].GetComponent<CardRotate>().cardNumber)
-            {
-                cartasClones[i].GetComponent<CardRotate>().state = 3;
-                count++;
-                i = 0;
-            }
-
-            if(count == 2)
-            {
-                cartasElegidas.Clear();
-                break;
-            }
         }
     }
 
