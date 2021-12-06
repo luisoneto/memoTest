@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardRotate : MonoBehaviour
 {
     // 1 = oculta, 2= rotando, 3 = rotada esperando volver, 4 = volviendo , 5 = acertada
-    public int state = 0;
+    public int cardState = 0;
     public int cardNumber;
     public int id;
     public float speed = 1.0f;
@@ -20,16 +20,16 @@ public class CardRotate : MonoBehaviour
 
     void Update()
     {
-        if (state == 2)
+        if (cardState == 2)
         {
             StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, this.transform.gameObject));
         }
 
-        if (state == 4)
+        if (cardState == 4)
         {
             StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, this.transform.gameObject));
         }
-        if (state == 5)
+        if (cardState == 5)
         {
             this.transform.position = transform.position;
         }
@@ -54,7 +54,7 @@ public class CardRotate : MonoBehaviour
             }
         }
         this.transform.rotation = finalRotation;
-        state = 1;
+        cardState = 1;
     }
 
     public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
@@ -74,7 +74,7 @@ public class CardRotate : MonoBehaviour
             }
         }
         card.transform.rotation = finalRotation;
-        state = 3;
+        cardState = 3;
     }
 
     IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
@@ -94,7 +94,7 @@ public class CardRotate : MonoBehaviour
             }
         }
         card.transform.rotation = finalRotation;
-        state = 1;
+        cardState = 1;
     }
 }
 

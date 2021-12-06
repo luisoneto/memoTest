@@ -71,9 +71,10 @@ public class gameController : MonoBehaviour
                 return;
             }
 
-            if (cartaElegida != null && cartaElegida.state == 1)
+            if (cartaElegida != null && cartaElegida.cardState == 1)
             {
-                cartaElegida.state = 2;
+                cartaElegida.cardState = 2;
+                cartasElegidas.Add(cartaElegida.gameObject);
             }
         }
     }
@@ -249,18 +250,18 @@ public class gameController : MonoBehaviour
 
     void CheckGameState()
     {
-        cartasAcertadas++;
-
-        if (MainMenuController.Dificultad == 1 && cartasAcertadas == 4)
+        int CorrectCards = 0;
+        for (int i = 0; i < cartasClones.Count; i++)
         {
-            Debug.Log("Ganaste perrin!");
+            if (cartasClones[i].GetComponent<CardRotate>().cardState == 5)
+            {
+                CorrectCards++;
+            }
+            if(CorrectCards == cartasClones.Count)
+            {
+                Debug.Log("Ganaste");
+            }
         }
-
-        if (MainMenuController.Dificultad == 2 && cartasAcertadas == 8)
-        {
-            Debug.Log("Ganaste perrin!");
-        }
-
     }
 
     IEnumerator EnableCardsColliders()
@@ -306,7 +307,7 @@ public class gameController : MonoBehaviour
         int count = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().state == 2 || cartasClones[i].GetComponent<CardRotate>().state == 4)
+            if (cartasClones[i].GetComponent<CardRotate>().cardState == 2 || cartasClones[i].GetComponent<CardRotate>().cardState == 4)
             {
                 count++;
             }
@@ -323,13 +324,11 @@ public class gameController : MonoBehaviour
 
     bool ExistTwoCardsInStateThree()
     {
-        // No funciona ! , Si no puedo solucionarlo voy a almacenar directamente el id de las cartas elegidas y despues compararlo.
         int count = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().state == 3)
+            if (cartasClones[i].GetComponent<CardRotate>().cardState == 3)
             {
-                cartasElegidas[count] = cartasClones[i];
                 count++;
             }
         }
@@ -347,14 +346,17 @@ public class gameController : MonoBehaviour
     {
         if (cartasElegidas[0].GetComponent<CardRotate>().id == cartasElegidas[1].GetComponent<CardRotate>().id)
         {
-            cartasElegidas[0].GetComponent<CardRotate>().state = 5;
-            cartasElegidas[1].GetComponent<CardRotate>().state = 5;
+            for(int i = 0; i < cartasElegidas.Count; ++i)
+            {
+                cartasElegidas[i].GetComponent<CardRotate>().cardState = 5;
+            }
             return true;
         }
         else
         {
-            cartasElegidas[0].GetComponent<CardRotate>().state = 4;
-            cartasElegidas[1].GetComponent<CardRotate>().state = 4;
+            cartasElegidas[0].GetComponent<CardRotate>().cardState = 4;
+            cartasElegidas[1].GetComponent<CardRotate>().cardState = 4;
+            cartasElegidas.Clear();
             return false;
         }
     }
