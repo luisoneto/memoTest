@@ -326,6 +326,7 @@ public class gameController : MonoBehaviour
 
     bool ExistTwoCardsInStateThree()
     {
+        // No funciona ! , Si no puedo solucionarlo voy a almacenar directamente el id de las cartas elegidas y despues compararlo.
         int count = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
