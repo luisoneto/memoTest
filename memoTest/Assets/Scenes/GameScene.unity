@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43749028, g: 0.48531085, b: 0.5655851, a: 1}
+  m_IndirectSpecularColor: {r: 0.43748978, g: 0.4853109, b: 0.56558526, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d117660247a5b448351ada6050f0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cartasRotadas: 0
+  state: 0
   cardNumber: 0
   id: 0
   speed: 1
@@ -1119,10 +1119,7 @@ MonoBehaviour:
   cardSlide2: {fileID: 2122133542}
   cardSlide: {fileID: 2122133541}
   popSound: {fileID: 2122133540}
-  terminoDeRotar: 0
   cartasAcertadas: 0
-  speed: 1
-  isRotated: 0
   cartasClones: []
   idsCartas: 0000000000000000
   cartasElegidas: []
