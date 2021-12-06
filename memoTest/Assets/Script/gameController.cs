@@ -11,7 +11,6 @@ public class gameController : MonoBehaviour
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;
-    public int cartasAcertadas;
     public List<GameObject> cartasClones = new List<GameObject>();
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();
@@ -19,7 +18,6 @@ public class gameController : MonoBehaviour
     public List<Vector3> CardsVectors = new List<Vector3>();
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);
-    public int cartasRotadas = 0;
 
     void Start()
     {
@@ -178,18 +176,6 @@ public class gameController : MonoBehaviour
         }
 
     }
-    void reproducirCartaSlide2()
-    {
-        cardSlide2.Play();
-    }
-    void reproducirCartaSlide()
-    {
-        cardSlide.Play();
-    }
-    void sumarCarta()
-    {
-        ++cartasRotadas;
-    }
     void RandomizeCardsPosition()
     {
         System.Random _random = new System.Random();
@@ -280,26 +266,6 @@ public class gameController : MonoBehaviour
         {
             cartasClones[carta].GetComponent<Collider>().enabled = true;
         }
-    }
-
-
-    public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card, CardRotate carta)
-    {
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            card.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
-                card.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        card.transform.rotation = finalRotation;
     }
 
     bool ExistTwoRotatedCards()
