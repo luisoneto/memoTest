@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardRotate : MonoBehaviour
 {
     // 1 = oculta, 2= rotando, 3 = rotada esperando volver, 4 = volviendo , 5 = acertada
+    public bool Acertada;
     public int cardState = 0;
     public int cardNumber;
     public int id;
@@ -25,13 +26,18 @@ public class CardRotate : MonoBehaviour
             StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, this.transform.gameObject));
         }
 
-        if (cardState == 4)
+        if (cardState == 4 && !Acertada)
         {
             StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, this.transform.gameObject));
         }
-        if (cardState == 5)
+        //if (cardState == 5)
+        //{
+        //    this.transform.position = transform.position;
+        //}
+
+        if(cardState == 3 && Acertada == true)
         {
-            this.transform.position = transform.position;
+            cardState = 5;
         }
     }
     IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
@@ -77,9 +83,9 @@ public class CardRotate : MonoBehaviour
         cardState = 3;
     }
 
-    IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
+    public IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         if (duration > 0f)
         {
             float startTime = Time.time;
@@ -95,6 +101,30 @@ public class CardRotate : MonoBehaviour
         }
         card.transform.rotation = finalRotation;
         cardState = 1;
+    }
+
+    public void ChangeCardState(int state)
+    {
+        cardState = state;
+    }
+
+    // no encuentro un nombre para ese bool le puse ''a''
+    public void EsAcertada(bool a)
+    {
+        Acertada = a;
+    }
+
+
+    public bool CardIsRotated()
+    {
+        if(this.transform.rotation == showPosition)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

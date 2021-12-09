@@ -43,17 +43,18 @@ public class gameController : MonoBehaviour
 
         if (ExistTwoCardsInStateThree())
         {
-            if (CardsIdAreEquals())
-            {
-                PointsLogic(true);
-                CheckGameState();
-            }
-            else
-            {
-                PointsLogic(false);
-            }
+            GameLogic();
+             
         }
     }
+
+    void GameLogic()
+    {
+        PointsLogic(CardsIdAreEquals());
+        cartasElegidas.Clear();
+        CheckGameState();
+        return;
+    }    
 
     void ClickOnCard()
     {
@@ -62,7 +63,6 @@ public class gameController : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             CardRotate cartaElegida = hit.collider.GetComponent<CardRotate>();
-            // si el collider es null que no haga nada, si no tira error.
 
             if (ExistTwoRotatedCards())
             {
@@ -71,7 +71,7 @@ public class gameController : MonoBehaviour
 
             if (cartaElegida != null && cartaElegida.cardState == 1)
             {
-                cartaElegida.cardState = 2;
+                cartaElegida.ChangeCardState(2);
                 cartasElegidas.Add(cartaElegida.gameObject);
             }
         }
@@ -273,9 +273,13 @@ public class gameController : MonoBehaviour
         int count = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().cardState == 2 || cartasClones[i].GetComponent<CardRotate>().cardState == 4)
+            if (cartasClones[i].GetComponent<CardRotate>().cardState == 3 || cartasClones[i].GetComponent<CardRotate>().cardState == 2)
             {
                 count++;
+            }
+            if(cartasClones[i].GetComponent<CardRotate>().cardState == 4)
+            {
+                return true;
             }
         }
         if (count == 2)
@@ -288,41 +292,38 @@ public class gameController : MonoBehaviour
         }
     }
 
-    bool ExistTwoCardsInStateThree()
+    public bool ExistTwoCardsInStateThree()
     {
         int count = 0;
-        for (int i = 0; i < cartasClones.Count; i++)
+
+        for(int i = 0; i < cartasElegidas.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().cardState == 3)
+            if (cartasElegidas[i].GetComponent<CardRotate>().CardIsRotated())
             {
                 count++;
             }
+            if(count == 2)
+            {
+                return true;
+            }               
         }
-        if (count == 2)
-        {
-            return true;
-        }
-        else
-        {
             return false;
-        }
     }
 
     bool CardsIdAreEquals()
     {
         if (cartasElegidas[0].GetComponent<CardRotate>().id == cartasElegidas[1].GetComponent<CardRotate>().id)
-        {
-            for(int i = 0; i < cartasElegidas.Count; ++i)
-            {
-                cartasElegidas[i].GetComponent<CardRotate>().cardState = 5;
-            }
+        {                     
+            cartasElegidas[0].GetComponent<CardRotate>().EsAcertada(true);
+            cartasElegidas[1].GetComponent<CardRotate>().EsAcertada(true);
             return true;
         }
         else
         {
-            cartasElegidas[0].GetComponent<CardRotate>().cardState = 4;
-            cartasElegidas[1].GetComponent<CardRotate>().cardState = 4;
-            cartasElegidas.Clear();
+            cartasElegidas[0].GetComponent<CardRotate>().ChangeCardState(4);
+            cartasElegidas[1].GetComponent<CardRotate>().ChangeCardState(4);
+            cartasElegidas[0].GetComponent<CardRotate>().EsAcertada(false);
+            cartasElegidas[1].GetComponent<CardRotate>().EsAcertada(false);
             return false;
         }
     }
