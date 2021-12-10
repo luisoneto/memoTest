@@ -239,7 +239,7 @@ public class gameController : MonoBehaviour
         int CorrectCards = 0;
         for (int i = 0; i < cartasClones.Count; i++)
         {
-            if (cartasClones[i].GetComponent<CardRotate>().cardState == 5)
+            if (cartasClones[i].GetComponent<CardRotate>().CardIsRotated())
             {
                 CorrectCards++;
             }
@@ -248,6 +248,7 @@ public class gameController : MonoBehaviour
                 Debug.Log("Ganaste");
             }
         }
+        CorrectCards = 0;
     }
 
     IEnumerator EnableCardsColliders()
@@ -294,15 +295,15 @@ public class gameController : MonoBehaviour
 
     public bool ExistTwoCardsInStateThree()
     {
-        int count = 0;
+        int rotatedCards = 0;
 
         for(int i = 0; i < cartasElegidas.Count; i++)
         {
             if (cartasElegidas[i].GetComponent<CardRotate>().CardIsRotated())
             {
-                count++;
+                rotatedCards++;
             }
-            if(count == 2)
+            if(rotatedCards == 2)
             {
                 return true;
             }               

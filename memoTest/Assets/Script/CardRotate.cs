@@ -21,17 +21,6 @@ public class CardRotate : MonoBehaviour
 
     void Update()
     {
-        if (cardState == 2)
-        {
-            StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, transform.gameObject));
-        }
-
-        if (cardState == 4 && !Acertada)
-        {
-            StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, transform.gameObject));
-        }
-
-
         if(cardState == 3 && Acertada == true)
         {
             cardState = 5;
@@ -59,6 +48,20 @@ public class CardRotate : MonoBehaviour
         this.transform.rotation = finalRotation;
         cardState = 1;
     }
+
+
+    public void StartRotatingCard()
+    {
+        cardState = 2;
+        StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, transform.gameObject));
+    }
+
+    public void ReturnCardToShowPosition()
+    {
+        cardState = 4;
+        StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, transform.gameObject));
+    }
+
 
     public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
@@ -100,15 +103,12 @@ public class CardRotate : MonoBehaviour
         cardState = 1;
     }
 
-    public void ChangeCardState(int state)
-    {
-        cardState = state;
-    }
+
 
     // no encuentro un nombre para ese bool le puse ''a''
-    public void EsAcertada(bool a)
+    public void EsAcertada(bool respuesta)
     {
-        Acertada = a;
+        Acertada = respuesta;
     }
 
 
