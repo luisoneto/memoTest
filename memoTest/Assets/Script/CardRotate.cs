@@ -23,17 +23,14 @@ public class CardRotate : MonoBehaviour
     {
         if (cardState == 2)
         {
-            StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, this.transform.gameObject));
+            StartCoroutine(RotateCard(hidePosition, showPosition, 0.5f, transform.gameObject));
         }
 
         if (cardState == 4 && !Acertada)
         {
-            StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, this.transform.gameObject));
+            StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, transform.gameObject));
         }
-        //if (cardState == 5)
-        //{
-        //    this.transform.position = transform.position;
-        //}
+
 
         if(cardState == 3 && Acertada == true)
         {

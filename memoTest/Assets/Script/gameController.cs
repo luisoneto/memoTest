@@ -54,7 +54,7 @@ public class gameController : MonoBehaviour
         cartasElegidas.Clear();
         CheckGameState();
         return;
-    }    
+    }
 
     void ClickOnCard()
     {
@@ -71,7 +71,7 @@ public class gameController : MonoBehaviour
 
             if (cartaElegida != null && cartaElegida.cardState == 1)
             {
-                cartaElegida.ChangeCardState(2);
+                cartaElegida.StartRotatingCard();
                 cartasElegidas.Add(cartaElegida.gameObject);
             }
         }
@@ -320,8 +320,8 @@ public class gameController : MonoBehaviour
         }
         else
         {
-            cartasElegidas[0].GetComponent<CardRotate>().ChangeCardState(4);
-            cartasElegidas[1].GetComponent<CardRotate>().ChangeCardState(4);
+            cartasElegidas[0].GetComponent<CardRotate>().ReturnCardToShowPosition();
+            cartasElegidas[1].GetComponent<CardRotate>().ReturnCardToShowPosition();
             cartasElegidas[0].GetComponent<CardRotate>().EsAcertada(false);
             cartasElegidas[1].GetComponent<CardRotate>().EsAcertada(false);
             return false;
