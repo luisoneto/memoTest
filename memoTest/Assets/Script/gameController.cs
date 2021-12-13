@@ -44,7 +44,6 @@ public class gameController : MonoBehaviour
         if (ExistTwoCardsInStateThree())
         {
             GameLogic();
-             
         }
     }
 
