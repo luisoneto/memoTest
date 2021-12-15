@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
-    private int puntos;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;
@@ -27,29 +26,26 @@ public class gameController : MonoBehaviour
 
         RandomizeCardsPosition();
 
-        CardsPosition();
+        CardsSpawn();
 
-        puntos = 10;
     }
     void Update()
     {
-        var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
-        totalPoints.text = "Puntos: " + puntos;
-
         if (Input.GetMouseButtonDown(0))
         {
             ClickOnCard();
         }
 
-        if (ExistTwoCardsInStateThree())
+        if (CardsWaitingForValidate())
         {
-            GameLogic();
+            ValidateCards();
         }
     }
 
-    void GameLogic()
+    void ValidateCards()
     {
-        PointsLogic(CardsIdAreEquals());
+        var puntajeController = GameObject.Find("Canvas").GetComponent<CanvasController>();
+        puntajeController.PointsLogic(CardsIdAreEquals());
         cartasElegidas.Clear();
         CheckGameState();
         return;
@@ -76,65 +72,12 @@ public class gameController : MonoBehaviour
         }
     }
 
-    void PointsLogic(bool answer)
-
-    {
-        if (answer)
-        {
-            puntos = puntos + 3;
-            var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
-            pointText.enabled = true;
-            Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
-            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
-
-        }
-        else
-        {
-            puntos = puntos - 1;
-            var pointText = GameObject.Find("text_lostpoint").GetComponent<TMP_Text>();
-            pointText.enabled = true;
-            Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
-            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
-
-        }
-
-
-    }
-    void CardsPosition()
-    {
-
-
-
-
-
-        if (MainMenuController.Dificultad == 1)
-        {
-            int count = 0;
-            for (int z = 0; z < 2; z++)
-            {
-
-                for (int a = 0; a < 4; a++)
-                {
-                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
-                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
-                    cartasClones.Add(carta);
-                    cartasClones[count].GetComponent<CardRotate>().cardNumber = count;
-                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
-                    count++;
-                }
-
-            }
-        }
-
-        if (MainMenuController.Dificultad == 2)
-        {
+    void CardsSpawn()
+    {      
             int count = 0;
             int cardNumber = 0;
             for (int z = 0; z < 4; z++)
             {
-
                 for (int a = 0; a < 4; a++)
                 {
                     // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
@@ -149,31 +92,7 @@ public class gameController : MonoBehaviour
                         count = 0;
                     }
                 }
-
-            }
-        }
-
-        if (MainMenuController.Dificultad == 3)
-        {
-            int count = 0;
-            for (int z = 0; z < 4; z++)
-            {
-
-                for (int a = 0; a < 4; a++)
-                {
-                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
-                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
-                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
-                    count++;
-                    if (count == 8)
-                    {
-                        count = 0;
-                    }
-                }
-
-            }
-        }
-
+            }       
     }
     void RandomizeCardsPosition()
     {
@@ -191,47 +110,7 @@ public class gameController : MonoBehaviour
         }
     }
 
-    IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, TMP_Text text)
-    {
-        if (duration > 0f)
-        {
-
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            text.transform.localPosition = originalPosition;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                text.transform.localPosition = Vector3.Lerp(text.transform.localPosition, new Vector3(text.transform.localPosition.x, 60, 0), progress);
-                yield return null;
-            }
-        }
-    }
-
-    IEnumerator DisappearOverTime(Vector3 originalScale, float duration, TMP_Text text, Vector3 originalPosition)
-    {
-
-        yield return new WaitForSeconds(0.40f);
-        if (duration > 0f)
-        {
-            popSound.Play();
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            //card.transform.position = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                text.transform.localScale = Vector3.Slerp(text.transform.localScale, new Vector3(0, 0, 0), progress);
-                yield return null;
-            }
-        }
-
-        text.enabled = false;
-        text.transform.localPosition = originalPosition;
-        text.transform.localScale = originalScale;
-    }
+  
 
     void CheckGameState()
     {
@@ -292,7 +171,7 @@ public class gameController : MonoBehaviour
         }
     }
 
-    public bool ExistTwoCardsInStateThree()
+    public bool CardsWaitingForValidate()
     {
         int rotatedCards = 0;
 
