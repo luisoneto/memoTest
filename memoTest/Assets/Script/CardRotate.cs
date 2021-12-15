@@ -26,29 +26,6 @@ public class CardRotate : MonoBehaviour
             cardState = 5;
         }
     }
-    IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
-    {
-
-        yield return new WaitForSeconds(2);
-
-        if (duration > 0f)
-        {
-            float startTime = Time.time;
-            float endTime = startTime + duration;
-            this.transform.rotation = originalRotation;
-            yield return null;
-            while (Time.time < endTime)
-            {
-                float progress = (Time.time - startTime) / duration;
-                // progress will equal 0 at startTime, 1 at endTime.
-                this.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
-                yield return null;
-            }
-        }
-        this.transform.rotation = finalRotation;
-        cardState = 1;
-    }
-
 
     public void StartRotatingCard()
     {
@@ -62,7 +39,23 @@ public class CardRotate : MonoBehaviour
         StartCoroutine(RotateOverTime(showPosition, hidePosition, 0.5f, transform.gameObject));
     }
 
+    public void EsAcertada(bool respuesta)
+    {
+        Acertada = respuesta;
+    }
 
+
+    public bool CardIsRotated()
+    {
+        if (this.transform.rotation == showPosition)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public IEnumerator RotateCard(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
         if (duration > 0f)
@@ -103,25 +96,28 @@ public class CardRotate : MonoBehaviour
         cardState = 1;
     }
 
-
-
-    // no encuentro un nombre para ese bool le puse ''a''
-    public void EsAcertada(bool respuesta)
+    IEnumerator ShowCards(Quaternion originalRotation, Quaternion finalRotation, float duration)
     {
-        Acertada = respuesta;
+
+        yield return new WaitForSeconds(2);
+
+        if (duration > 0f)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            this.transform.rotation = originalRotation;
+            yield return null;
+            while (Time.time < endTime)
+            {
+                float progress = (Time.time - startTime) / duration;
+                // progress will equal 0 at startTime, 1 at endTime.
+                this.transform.rotation = Quaternion.Slerp(originalRotation, finalRotation, progress);
+                yield return null;
+            }
+        }
+        this.transform.rotation = finalRotation;
+        cardState = 1;
     }
 
-
-    public bool CardIsRotated()
-    {
-        if(this.transform.rotation == showPosition)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
 
