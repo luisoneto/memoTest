@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
+    static int gameState;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;
@@ -124,6 +125,8 @@ public class gameController : MonoBehaviour
             if(CorrectCards == cartasClones.Count)
             {
                 Debug.Log("Ganaste");
+                gameState = 1;
+                
             }
         }
         CorrectCards = 0;
