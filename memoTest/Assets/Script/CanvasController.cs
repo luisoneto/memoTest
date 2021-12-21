@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CanvasController : MonoBehaviour
 {
-    int puntos = 0;
+    public static int puntos = 0;
     // Start is called before the first frame update
     void Start()
     {

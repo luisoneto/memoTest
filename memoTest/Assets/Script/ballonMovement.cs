@@ -12,11 +12,11 @@ public class ballonMovement : MonoBehaviour
 
     void Start()
     {
-        GetComponent<Renderer>().material = Materials[Random.Range(0 , 3)];
+        GetComponent<Renderer>().material = Materials[Random.Range(0 , Materials.Count)];
         time = 0;
         BobAngle = 10;
         BobSpeed = 2;
-        amount = 0.01f;
+        amount = 0.02f;
     }
 
     // Update is called once per frame

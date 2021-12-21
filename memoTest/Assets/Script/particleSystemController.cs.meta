@@ -3,7 +3,10 @@ guid: cfbc8c6a3d10dc647a9d97c40efd955c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Fireworks: {fileID: 2992766343798052997, guid: 868c14c387bb5214c9d614d5ed2fc4dd, type: 3}
+  - Confetti: {fileID: 3683919486640801993, guid: c356da8ff19793d4893ac7971a88c3eb, type: 3}
+  - Ballon: {fileID: 3998897816828451430, guid: 05fa4c1466f8ca64cb375c945de0ac6e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -11,7 +11,9 @@ public class FireWorksSound : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        var ma = ps.emission;
+        ma.rateOverTime.constantMax = 5.0f;
     }
     // Update is called once per frame
     void Update()
