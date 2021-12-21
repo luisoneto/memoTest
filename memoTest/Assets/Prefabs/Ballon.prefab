@@ -112,12 +112,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Materials:
-  - {fileID: 2100000, guid: 1303cb2b2d64dfd47964ca939803f552, type: 2}
+  - {fileID: 2100000, guid: 2bf07362aa4e1a5448cb440ac358a9c1, type: 2}
   - {fileID: 2100000, guid: efee3b9a88f12b64384a3cf5e10f0e47, type: 2}
-  - {fileID: 2100000, guid: 7db1bc504180f834685babb7877c3ff0, type: 2}
-  - {fileID: 2100000, guid: 6f2e768139b89f540abdd90d1bffe99d, type: 2}
-  - {fileID: 2100000, guid: d5cfd914ae77201418020f8e02d622f3, type: 2}
-  - {fileID: 2100000, guid: c623b46f79f4c3f419ccbde561b5b583, type: 2}
+  - {fileID: 2100000, guid: dff48206ac322ca44b4c8c97e3e770e0, type: 2}
+  - {fileID: 2100000, guid: 9d9f9e51af742ab458f5d2143a461af6, type: 2}
+  - {fileID: 2100000, guid: 3ca81e1d5c35b5a42ae9178b0d955c83, type: 2}
+  - {fileID: 2100000, guid: 81d519232473a50458d885e312ba4adb, type: 2}
   BobAngle: 0
   BobSpeed: 0
   amount: 0
