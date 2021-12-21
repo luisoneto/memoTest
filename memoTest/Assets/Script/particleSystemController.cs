@@ -12,7 +12,7 @@ public class particleSystemController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(Fireworks, new Vector3(Random.Range(-15.0f, -8), 0, -3), Quaternion.identity);
+        Invoke("BallonSpawn", 1.0f);
     }
 
     // Update is called once per frame
@@ -52,6 +52,14 @@ public class particleSystemController : MonoBehaviour
 
     void Celebrations()
     {
-        Instantiate(Fireworks, new Vector3(Random.Range(-15.0f, -8), 0 , -3 ), Quaternion.identity);
+        Instantiate(Fireworks, new Vector3(-9.0f, 0 , -3 ), Quaternion.identity);
+        Instantiate(Fireworks, new Vector3(9.0f, 0, -3), Quaternion.identity);
+
     }
+
+    void BallonSpawn()
+    {
+        Instantiate(Ballon, new Vector3(Random.Range(6,-6), 2, Random.Range(-6, -10)), Quaternion.identity);
+        Invoke("BallonSpawn", 1.0f);
+    }    
 }

@@ -11,9 +11,11 @@ public class FireWorksSound : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var intensity = GameObject.Find("ParticleSystemC").GetComponent<particleSystemController>();
         ParticleSystem ps = GetComponent<ParticleSystem>();
-        var ma = ps.emission;
-        ma.rateOverTime.constantMax = 5.0f;
+        ParticleSystem.EmissionModule yourEmissionModule;
+        yourEmissionModule = ps.emission;
+        yourEmissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(0.0f, intensity.intensity);
     }
     // Update is called once per frame
     void Update()

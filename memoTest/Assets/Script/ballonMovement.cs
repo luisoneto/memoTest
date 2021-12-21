@@ -12,7 +12,9 @@ public class ballonMovement : MonoBehaviour
 
     void Start()
     {
-        GetComponent<Renderer>().material = Materials[Random.Range(0 , Materials.Count)];
+
+        GetComponent<Renderer>().material = Materials[Random.Range(0, Materials.Count)];
+        GetComponent<Transform>().localScale = new Vector3(1, Random.Range(0.5f, 1), 1);
         time = 0;
         BobAngle = 10;
         BobSpeed = 2;
@@ -27,4 +29,33 @@ public class ballonMovement : MonoBehaviour
         transform.position += transform.forward * amount;
     }
 
+    void OnCollisionEnter(Collision colission)
+    {
+        Vector3 dir = (colission.gameObject.transform.position - gameObject.transform.position).normalized;
+
+        if (Mathf.Abs(dir.z) < 0.05f)
+        {
+            if (dir.x > 0)
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.left * 5f);
+            }
+            else if (dir.x < 0)
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.right * 5f);
+            }
+
+            if(dir.y == 1)
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.back * 5f);
+            }
+
+               
+            if(dir.y == -1)
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.forward * 5f);
+            }
+
+        }
+
+    }
 }
