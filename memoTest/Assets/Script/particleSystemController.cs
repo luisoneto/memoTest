@@ -12,7 +12,7 @@ public class particleSystemController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("BallonSpawn", 1.0f);
+        //Invoke("BallonSpawn", 1.0f);
     }
 
     // Update is called once per frame

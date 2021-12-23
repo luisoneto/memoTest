@@ -16,7 +16,7 @@ public class CanvasController : MonoBehaviour
     void Update()
     {
         var totalPoints = GameObject.Find("text_totalPoints").GetComponent<TMP_Text>();
-        totalPoints.text = "Puntos: " + puntos;
+        totalPoints.text = puntos.ToString();
     }
 
 
@@ -29,7 +29,7 @@ public class CanvasController : MonoBehaviour
             var pointText = GameObject.Find("text_points").GetComponent<TMP_Text>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
+            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 190, 0), 0.5f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
 
         }
@@ -39,7 +39,7 @@ public class CanvasController : MonoBehaviour
             var pointText = GameObject.Find("text_lostpoint").GetComponent<TMP_Text>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.localPosition, new Vector3(pointText.transform.localPosition.x, 60, 0), 0.5f, pointText));
+            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 190, 0), 0.5f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
         }
     }
@@ -52,15 +52,16 @@ public class CanvasController : MonoBehaviour
 
             float startTime = Time.time;
             float endTime = startTime + duration;
-            text.transform.localPosition = originalPosition;
+            text.transform.position = originalPosition;
             yield return null;
             while (Time.time < endTime)
             {
                 float progress = (Time.time - startTime) / duration;
-                text.transform.localPosition = Vector3.Lerp(text.transform.localPosition, new Vector3(text.transform.localPosition.x, 60, 0), progress);
+                text.transform.position = Vector3.Lerp(text.transform.position, finalPosition, progress);
                 yield return null;
             }
         }
+        text.transform.position = finalPosition;
     }
 
     IEnumerator DisappearOverTime(Vector3 originalScale, float duration, TMP_Text text, Vector3 originalPosition)
