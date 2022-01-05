@@ -11,7 +11,7 @@ public class CelebrationStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("FireWorksSpawn", 1.0f);
+        Celebrations();
     }
 
     // Update is called once per frame
@@ -53,15 +53,15 @@ public class CelebrationStarter : MonoBehaviour
         Invoke("FireWorksSpawn", 1.0f);
     }
     void ConfettiSpawn()
-    {       
-        Instantiate(Confetti, transform.position, Quaternion.identity);
+    {
+        _ = Instantiate(Confetti, transform.position, Quaternion.identity);
         Invoke("ConfettiSpawn", SetDelay());
     }
 
     void BallonSpawn()
     {
         Instantiate(Ballon, new Vector3(Random.Range(4, -4), 2, -5), Quaternion.identity);
-        Invoke("BallonSpawn", SetDelay());
+        Invoke("BallonSpawn", SetDelay() - 0.5f);
     }
 
     float SetDelay()

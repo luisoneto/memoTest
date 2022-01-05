@@ -18,7 +18,7 @@ public class ballonMovement : MonoBehaviour
         time = 0;
         BobAngle = 10;
         BobSpeed = 2;
-        amount = 0.02f;
+        amount = Random.Range(0.01f, 0.05f);
     }
 
     // Update is called once per frame

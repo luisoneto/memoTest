@@ -30,7 +30,7 @@ public class CanvasController : MonoBehaviour
             var pointText = GameObject.Find("GreenCoin").GetComponent<Image>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 0.5f, pointText));
+            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 1.0f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
 
         }
@@ -40,7 +40,7 @@ public class CanvasController : MonoBehaviour
             var pointText = GameObject.Find("RedCoin").GetComponent<Image>();
             pointText.enabled = true;
             Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 0.5f, pointText));
+            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 1.0f, pointText));
             StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
         }
     }
@@ -68,7 +68,7 @@ public class CanvasController : MonoBehaviour
     IEnumerator DisappearOverTime(Vector3 originalScale, float duration, Image coin, Vector3 originalPosition)
     {
 
-        yield return new WaitForSeconds(0.40f);
+        yield return new WaitForSeconds(0.20f);
         if (duration > 0f)
         {
             //popSound.Play();
