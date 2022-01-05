@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
-    public static int gameState;
+    public static int gameState = 0;
+    public int gamestate2 = 0;
     public AudioSource cardSlide2;
     public AudioSource cardSlide;
     public AudioSource popSound;

@@ -27,6 +27,13 @@ public class ballonMovement : MonoBehaviour
         time += Time.deltaTime;
         transform.rotation = Quaternion.AngleAxis(Mathf.Sin(time * BobSpeed) * BobAngle, new Vector3(0, 1, 0));
         transform.position += transform.forward * amount;
+
+
+        if(transform.position.z > 8)
+        {
+            Destroy(gameObject);
+        }
+            
     }
 
     void OnCollisionEnter(Collision colission)

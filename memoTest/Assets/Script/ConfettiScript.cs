@@ -15,6 +15,11 @@ public class ConfettiScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Invoke("DestroyConfetti", 1.0f);
+    }
+
+    void DestroyConfetti()
+    {
+        Destroy(gameObject);
     }
 }

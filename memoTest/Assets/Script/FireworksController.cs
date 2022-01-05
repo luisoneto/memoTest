@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireWorksSound : MonoBehaviour
+public class FireworksController : MonoBehaviour
 {
     public AudioSource onBirthSound;
     public AudioSource onDeathSound;
@@ -11,12 +11,16 @@ public class FireWorksSound : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var intensity = GameObject.Find("ParticleSystemC").GetComponent<particleSystemController>();
+        GetComponent<Transform>().position = new Vector3(Random.Range(-3, 3), Random.Range(0.5f, 1), -5);
+        var intensity = GameObject.Find("ParticleSystemC").GetComponent<Intensity>();
         ParticleSystem ps = GetComponent<ParticleSystem>();
         ParticleSystem.EmissionModule yourEmissionModule;
         yourEmissionModule = ps.emission;
-        yourEmissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(0.0f, intensity.intensity);
+        // si intensity es 4 o 5 que la constante minima sea intensity - 2;
+        yourEmissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minConstant(intensity.intensity), intensity.intensity);
+        Invoke("DestroyParticleSystem", 6.0f);
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -30,8 +34,27 @@ public class FireWorksSound : MonoBehaviour
             onBirthSound.Play();
         }
         _numberOfParticles = count;
-            
+                 
     }
+
+    float minConstant(int intensity)
+    {
+        float resultado = 0f;
+        if (intensity > 3)
+        {
+            resultado = -2f;
+        }
+            
+        return resultado;
+    }
+
+    void DestroyParticleSystem()
+    {
+        Destroy(gameObject);
+    }
+
+
+
 
 
 }
