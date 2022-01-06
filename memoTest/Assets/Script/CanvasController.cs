@@ -41,7 +41,7 @@ public class CanvasController : MonoBehaviour
         Vector3 OriginalPosition = coin.transform.localPosition;
         Image newCoin = Instantiate(coin, coin.transform.position,Quaternion.identity, parent );
         newCoin.enabled = true;
-        StartCoroutine(upText(newCoin.transform.position, new Vector3(newCoin.transform.position.x, 200, 0), 1.5f, newCoin));
+        StartCoroutine(upText(newCoin.transform.position, new Vector3(newCoin.transform.position.x, 200, 0), 1.0f, newCoin));
         StartCoroutine(DisappearOverTime(newCoin.transform.localScale, 1.0f, newCoin, OriginalPosition));   
     }
 
@@ -68,7 +68,7 @@ public class CanvasController : MonoBehaviour
     IEnumerator DisappearOverTime(Vector3 originalScale, float duration, Image coin, Vector3 originalPosition)
     {
 
-        yield return new WaitForSeconds(0.50f);
+        yield return new WaitForSeconds(0.75f);
         if (duration > 0f)
         {
             //popSound.Play();
