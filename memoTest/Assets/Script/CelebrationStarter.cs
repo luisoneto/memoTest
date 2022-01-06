@@ -11,7 +11,7 @@ public class CelebrationStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Celebrations();
+        //Celebrations();
     }
 
     // Update is called once per frame

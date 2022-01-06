@@ -24,33 +24,33 @@ public class CanvasController : MonoBehaviour
     public void PointsLogic(bool answer)
 
     {
-        if (answer)
+        string coinName;
+        if(answer)
         {
+            coinName = "GreenCoin";
             puntos = puntos + 3;
-            var pointText = GameObject.Find("GreenCoin").GetComponent<Image>();
-            pointText.enabled = true;
-            Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 1.0f, pointText));
-            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
-
         }
         else
-        {
+        {           
+            coinName = "RedCoin";
             puntos = puntos - 1;
-            var pointText = GameObject.Find("RedCoin").GetComponent<Image>();
-            pointText.enabled = true;
-            Vector3 OriginalPosition = pointText.transform.localPosition;
-            StartCoroutine(upText(pointText.transform.position, new Vector3(pointText.transform.position.x, 200, 0), 1.0f, pointText));
-            StartCoroutine(DisappearOverTime(pointText.transform.localScale, 1.0f, pointText, OriginalPosition));
         }
+
+        var coin = GameObject.Find(coinName).GetComponent<Image>();
+        var parent = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        Vector3 OriginalPosition = coin.transform.localPosition;
+        Image newCoin = Instantiate(coin, coin.transform.position,Quaternion.identity, parent );
+        newCoin.enabled = true;
+        StartCoroutine(upText(newCoin.transform.position, new Vector3(newCoin.transform.position.x, 200, 0), 1.5f, newCoin));
+        StartCoroutine(DisappearOverTime(newCoin.transform.localScale, 1.0f, newCoin, OriginalPosition));   
     }
 
 
     IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, Image coin)
     {
+
         if (duration > 0f)
         {
-
             float startTime = Time.time;
             float endTime = startTime + duration;
             coin.transform.position = originalPosition;
@@ -68,7 +68,7 @@ public class CanvasController : MonoBehaviour
     IEnumerator DisappearOverTime(Vector3 originalScale, float duration, Image coin, Vector3 originalPosition)
     {
 
-        yield return new WaitForSeconds(0.20f);
+        yield return new WaitForSeconds(0.50f);
         if (duration > 0f)
         {
             //popSound.Play();
@@ -84,8 +84,6 @@ public class CanvasController : MonoBehaviour
             }
         }
 
-        coin.enabled = false;
-        coin.transform.localPosition = originalPosition;
-        coin.transform.localScale = originalScale;
+        Destroy(coin.gameObject);
     }
 }

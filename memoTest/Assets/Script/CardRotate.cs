@@ -21,7 +21,18 @@ public class CardRotate : MonoBehaviour
 
     void Update()
     {
-        if(cardState == 3 && Acertada == true)
+        //if(cardState == 3 && Acertada == true)
+        //{
+        //    cardState = 5;
+        //}
+    }
+
+
+    public void SetCardToFoundPosition()
+    {
+        Acertada = true;
+        
+        if (cardState == 3)
         {
             cardState = 5;
         }

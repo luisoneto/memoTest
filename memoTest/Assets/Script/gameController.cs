@@ -196,8 +196,8 @@ public class gameController : MonoBehaviour
     {
         if (cartasElegidas[0].GetComponent<CardRotate>().id == cartasElegidas[1].GetComponent<CardRotate>().id)
         {                     
-            cartasElegidas[0].GetComponent<CardRotate>().EsAcertada(true);
-            cartasElegidas[1].GetComponent<CardRotate>().EsAcertada(true);
+            cartasElegidas[0].GetComponent<CardRotate>().SetCardToFoundPosition();
+            cartasElegidas[1].GetComponent<CardRotate>().SetCardToFoundPosition();
             return true;
         }
         else
