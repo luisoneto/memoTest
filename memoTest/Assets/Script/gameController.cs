@@ -20,6 +20,7 @@ public class gameController : MonoBehaviour
     public Quaternion showPosition = Quaternion.Euler(0, 0, 180);
     public Quaternion hidePosition = Quaternion.Euler(0, 0, 0);
 
+
     void Start()
     {
         MainMenuController.Dificultad = 2;
@@ -86,7 +87,7 @@ public class gameController : MonoBehaviour
                     var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
                     cartasClones.Add(carta);
                     cartasClones[cardNumber].GetComponent<CardRotate>().cardNumber = cardNumber;
-                    CardsVectors[z] = CardsVectors[z] + new Vector3(2, 0, 0);
+                    CardsVectors[z] = CardsVectors[z] + new Vector3(2.5f, 0, 0);
                     count++;
                     cardNumber++;
                     if (count == 8)
