@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d5cfd914ae77201418020f8e02d622f3, type: 2}
+  - {fileID: 2100000, guid: b81c3c4178b5e4046b8223cf7a2be642, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 2003603020722140656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.36, y: 2, z: 0.9}
-  m_LocalScale: {x: 1, y: 0.2, z: 1}
+  m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_Children:
   - {fileID: 2003603020282532458}
   m_Father: {fileID: 0}
@@ -206,10 +206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d117660247a5b448351ada6050f0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cartasRotadas: 0
+  Acertada: 0
+  cardState: 0
+  cardNumber: 0
   id: 3
   speed: 1
-  rotation1: {x: 0, y: 0, z: 0, w: 1}
-  rotation2: {x: 0, y: 0, z: 1, w: -0.00000004371139}
-  rotationShowCard: {x: 0, y: 0, z: 1, w: -0.00000004371139}
-  rotationHideCard: {x: 0, y: 0, z: 0, w: 1}
+  showPosition: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  hidePosition: {x: 0, y: 0, z: 0, w: 1}
