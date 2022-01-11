@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class CanvasController : MonoBehaviour
 {
     public static int puntos = 0;
+    public GameObject BlueCoin;
+    public GameObject RedCoin;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,28 +27,34 @@ public class CanvasController : MonoBehaviour
 
     {
         string coinName;
-        if(answer)
+        var card = GameObject.Find("gameController").GetComponent<gameController>();
+        Vector3 OriginalPosition = BlueCoin.transform.position;
+        if (answer)
         {
-            coinName = "GreenCoin";
             puntos = puntos + 3;
+            var coin = Instantiate(BlueCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
+            StartCoroutine(upText(card.cartasElegidas[1].transform.position, card.cartasElegidas[1].transform.position + new Vector3(0, 0.5f, 0.5f), 1.0f, coin));
+            StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
         else
-        {           
-            coinName = "RedCoin";
+        {
             puntos = puntos - 1;
+            var coin = Instantiate(RedCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
+            StartCoroutine(upText(card.cartasElegidas[1].transform.position, card.cartasElegidas[1].transform.position + new Vector3(0, 0.5f, 0.5f), 1.0f, coin));
+            StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
-
-        var coin = GameObject.Find(coinName).GetComponent<Image>();
-        var parent = GameObject.Find("Canvas").GetComponent<RectTransform>();
-        Vector3 OriginalPosition = coin.transform.localPosition;
-        Image newCoin = Instantiate(coin, coin.transform.position,Quaternion.identity, parent );
-        newCoin.enabled = true;
-        StartCoroutine(upText(newCoin.transform.position, new Vector3(newCoin.transform.position.x, 200, 0), 1.0f, newCoin));
-        StartCoroutine(DisappearOverTime(newCoin.transform.localScale, 1.0f, newCoin, OriginalPosition));   
+        //var card = GameObject.Find("gameController").GetComponent<gameController>();
+        //var coin = GameObject.Find(coinName).GetComponent<Image>();
+        //var parent = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        //Vector3 OriginalPosition = card.cartasElegidas[1].transform.localPosition;
+        //Image newCoin = Instantiate(coin, card.cartasElegidas[1].transform.localPosition, Quaternion.identity);
+        //newCoin.enabled = true;
+        //StartCoroutine(upText(newCoin.transform.position, OriginalPosition /*+ new Vector3(newCoin.transform.position.x, 200, 0)*/, 1.0f, newCoin));
+        //StartCoroutine(DisappearOverTime(newCoin.transform.localScale, 1.0f, newCoin, OriginalPosition));   
     }
 
 
-    IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, Image coin)
+    IEnumerator upText(Vector3 originalPosition, Vector3 finalPosition, float duration, GameObject coin)
     {
 
         if (duration > 0f)
@@ -65,7 +73,7 @@ public class CanvasController : MonoBehaviour
         coin.transform.position = finalPosition;
     }
 
-    IEnumerator DisappearOverTime(Vector3 originalScale, float duration, Image coin, Vector3 originalPosition)
+    IEnumerator DisappearOverTime(Vector3 originalScale, float duration, GameObject coin, Vector3 originalPosition)
     {
 
         yield return new WaitForSeconds(0.75f);
@@ -83,7 +91,6 @@ public class CanvasController : MonoBehaviour
                 yield return null;
             }
         }
-
         Destroy(coin.gameObject);
     }
 }
