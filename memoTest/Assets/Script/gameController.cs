@@ -27,9 +27,9 @@ public class gameController : MonoBehaviour
 
         StartCoroutine(EnableCardsColliders());
 
-        RandomizeCardsPosition();
-
         CardsSpawn();
+
+        RandomizeCardsPosition();
 
     }
     void Update()
@@ -77,43 +77,59 @@ public class gameController : MonoBehaviour
 
     void CardsSpawn()
     {      
-            int count = 0;
-            int cardNumber = 0;
-            for (int z = 0; z < 4; z++)
-            {
-                for (int a = 0; a < 4; a++)
-                {
-                    // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
-                    var carta = Instantiate(cartas[count], CardsVectors[z], showPosition);
-                    cartasClones.Add(carta);
-                    cartasClones[cardNumber].GetComponent<CardRotate>().cardNumber = cardNumber;
-                    CardsVectors[z] = CardsVectors[z] + new Vector3(2.5f, 0, 0);
-                    count++;
-                    cardNumber++;
-                    if (count == 8)
-                    {
-                        count = 0;
-                    }
-                }
-            }       
-    }
-    void RandomizeCardsPosition()
-    {
-        System.Random _random = new System.Random();
-        GameObject myGO;
+        int count = 0;
+        int cardNumber = 0;
 
-        int n = cartas.Count;
-        for (int i = 0; i < n; i++)
+        var cartasDisponibles = cartas.ToList();
+        int numeroCartaActual = 0;
+
+        for (int cartasElegidas = 0; cartasElegidas < 8; cartasElegidas++)
         {
-            // NextDouble returns a random number between 0 and 1.
-            int r = i + (int)(_random.NextDouble() * (n - i));
-            myGO = cartas[r];
-            cartas[r] = cartas[i];
-            cartas[i] = myGO;
+            var cartaElegida = cartasDisponibles[Random.Range(0, cartasDisponibles.Count)];
+            cartasDisponibles.Remove(cartaElegida);
+
+            agregarCarta(cartaElegida, numeroCartaActual);
+            numeroCartaActual++;
+            agregarCarta(cartaElegida, numeroCartaActual);
+            numeroCartaActual++;
         }
     }
 
-  
+    void agregarCarta(GameObject cartaBase, int numeroCartaActual)
+    {
+        int fila = 0;
+        if (numeroCartaActual >= 4 && numeroCartaActual < 8)
+            fila = 1;
+        if (numeroCartaActual >= 8 && numeroCartaActual < 12)
+            fila = 2;
+        if (numeroCartaActual >= 12)
+            fila = 3;
+
+        // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
+        var carta = Instantiate(cartaBase, CardsVectors[fila], showPosition);
+        cartasClones.Add(carta);
+        carta.GetComponent<CardRotate>().cardNumber =  numeroCartaActual;
+        CardsVectors[fila] = CardsVectors[fila] + new Vector3(2.5f, 0, 0);
+    }
+
+    void RandomizeCardsPosition()
+    {
+        int vueltas = 0;
+        for (int i = 0; i < 40; i++)
+        {           
+            int cardIndexOne = Random.Range(0, cartasClones.Count);
+            int cardIndexTwo = Random.Range(0, cartasClones.Count);
+            Vector3 cardOneposition = cartasClones[cardIndexOne].transform.position;
+            cartasClones[cardIndexOne].transform.position = cartasClones[cardIndexTwo].transform.position;
+            cartasClones[cardIndexTwo].transform.position = cardOneposition;
+
+        }
+            
+        //cartasClones
+        // cambiar posiciones entre fichas (x cantgidad de veces intercambiar posiciones entre dos fichas random)
+
+
+    }
 
     void CheckGameState()
     {
