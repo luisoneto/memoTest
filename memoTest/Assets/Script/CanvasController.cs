@@ -26,7 +26,6 @@ public class CanvasController : MonoBehaviour
     public void PointsLogic(bool answer)
 
     {
-        string coinName;
         var card = GameObject.Find("gameController").GetComponent<gameController>();
         Vector3 OriginalPosition = BlueCoin.transform.position;
         if (answer)
@@ -43,14 +42,6 @@ public class CanvasController : MonoBehaviour
             StartCoroutine(upText(card.cartasElegidas[1].transform.position, card.cartasElegidas[1].transform.position + new Vector3(0, 0.5f, 0.5f), 1.0f, coin));
             StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
-        //var card = GameObject.Find("gameController").GetComponent<gameController>();
-        //var coin = GameObject.Find(coinName).GetComponent<Image>();
-        //var parent = GameObject.Find("Canvas").GetComponent<RectTransform>();
-        //Vector3 OriginalPosition = card.cartasElegidas[1].transform.localPosition;
-        //Image newCoin = Instantiate(coin, card.cartasElegidas[1].transform.localPosition, Quaternion.identity);
-        //newCoin.enabled = true;
-        //StartCoroutine(upText(newCoin.transform.position, OriginalPosition /*+ new Vector3(newCoin.transform.position.x, 200, 0)*/, 1.0f, newCoin));
-        //StartCoroutine(DisappearOverTime(newCoin.transform.localScale, 1.0f, newCoin, OriginalPosition));   
     }
 
 
