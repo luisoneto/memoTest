@@ -105,7 +105,6 @@ public class gameController : MonoBehaviour
         if (numeroCartaActual >= 12)
             fila = 3;
 
-        // guardar vectores en una lista para usarlos como referencia en donde instanciar los gameObects.
         var carta = Instantiate(cartaBase, CardsVectors[fila], showPosition);
         cartasClones.Add(carta);
         carta.GetComponent<CardRotate>().cardNumber =  numeroCartaActual;
@@ -114,7 +113,6 @@ public class gameController : MonoBehaviour
 
     void RandomizeCardsPosition()
     {
-        int vueltas = 0;
         for (int i = 0; i < 40; i++)
         {           
             int cardIndexOne = Random.Range(0, cartasClones.Count);
@@ -124,11 +122,6 @@ public class gameController : MonoBehaviour
             cartasClones[cardIndexTwo].transform.position = cardOneposition;
 
         }
-            
-        //cartasClones
-        // cambiar posiciones entre fichas (x cantgidad de veces intercambiar posiciones entre dos fichas random)
-
-
     }
 
     void CheckGameState()
