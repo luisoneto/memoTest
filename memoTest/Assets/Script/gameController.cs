@@ -120,7 +120,6 @@ public class gameController : MonoBehaviour
             Vector3 cardOneposition = cartasClones[cardIndexOne].transform.position;
             cartasClones[cardIndexOne].transform.position = cartasClones[cardIndexTwo].transform.position;
             cartasClones[cardIndexTwo].transform.position = cardOneposition;
-
         }
     }
 

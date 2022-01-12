@@ -31,15 +31,15 @@ public class CanvasController : MonoBehaviour
         if (answer)
         {
             puntos = puntos + 3;
-            var coin = Instantiate(BlueCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
-            StartCoroutine(upText(card.cartasElegidas[1].transform.position, card.cartasElegidas[1].transform.position + new Vector3(0, 0.5f, 0.5f), 1.0f, coin));
+            var coin = Instantiate(BlueCoin, card.cartasElegidas[1].transform.position , BlueCoin.transform.rotation);
+            StartCoroutine(upText(card.cartasElegidas[1].transform.position + new Vector3(0, 1.0f, 0.0f), card.cartasElegidas[1].transform.position + new Vector3(0, 1.5f, 1.0f), 1.0f, coin));
             StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
         else
         {
             puntos = puntos - 1;
             var coin = Instantiate(RedCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
-            StartCoroutine(upText(card.cartasElegidas[1].transform.position, card.cartasElegidas[1].transform.position + new Vector3(0, 0.5f, 0.5f), 1.0f, coin));
+            StartCoroutine(upText(card.cartasElegidas[1].transform.position + new Vector3(0, 1.0f, 0.0f), card.cartasElegidas[1].transform.position + new Vector3(0, 1.5f, 1.0f), 1.0f, coin));
             StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
     }
