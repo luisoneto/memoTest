@@ -45,11 +45,10 @@ public class CanvasController : MonoBehaviour
             else
             {
                 puntos = puntos - 1;
+                var coin = Instantiate(RedCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
+                StartCoroutine(upText(card.cartasElegidas[1].transform.position + new Vector3(0, 1.0f, 0.0f), card.cartasElegidas[1].transform.position + new Vector3(0, 1.5f, 1.0f), 1.0f, coin));
+                StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
             }
-
-            var coin = Instantiate(RedCoin, card.cartasElegidas[1].transform.position, BlueCoin.transform.rotation);
-            StartCoroutine(upText(card.cartasElegidas[1].transform.position + new Vector3(0, 1.0f, 0.0f), card.cartasElegidas[1].transform.position + new Vector3(0, 1.5f, 1.0f), 1.0f, coin));
-            StartCoroutine(DisappearOverTime(coin.transform.localScale, 1.0f, coin, OriginalPosition));
         }
     }
 
