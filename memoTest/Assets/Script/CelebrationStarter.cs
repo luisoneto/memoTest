@@ -31,26 +31,17 @@ public class CelebrationStarter : MonoBehaviour
                 ConfettiSpawn();
                 break;
             case 3:
-                ConfettiSpawn();
                 BallonSpawn();
                 break;
             case 4:
-                FireWorksSpawn();
                 BallonSpawn();
                 ConfettiSpawn();
                 break;
             case 5:
-                FireWorksSpawn();
                 BallonSpawn();
                 ConfettiSpawn();
                 break;
             }
-    }
-
-    void FireWorksSpawn()
-    {
-        Instantiate(Fireworks,transform.position , Quaternion.identity);
-        Invoke("FireWorksSpawn", 1.0f);
     }
     void ConfettiSpawn()
     {
