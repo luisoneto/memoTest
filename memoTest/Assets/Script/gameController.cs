@@ -9,9 +9,6 @@ public class gameController : MonoBehaviour
 {
     public static int gameState = 0;
     public int gamestate2 = 0;
-    public AudioSource cardSlide2;
-    public AudioSource cardSlide;
-    public AudioSource popSound;
     public List<GameObject> cartasClones = new List<GameObject>();
     public List<int> idsCartas = new List<int>(2);
     public List<GameObject> cartasElegidas = new List<GameObject>();

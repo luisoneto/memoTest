@@ -5,6 +5,9 @@ using UnityEngine;
 public class CardRotate : MonoBehaviour
 {
     // 1 = oculta, 2= rotando, 3 = rotada esperando volver, 4 = volviendo , 5 = acertada
+    public AudioSource CardSlideShow;
+    public AudioSource CardSlideHide;
+    public AudioSource InstrumentoSound;
     public bool Acertada;
     public int cardState = 0;
     public int cardNumber;
@@ -83,12 +86,14 @@ public class CardRotate : MonoBehaviour
                 yield return null;
             }
         }
+        CardSlideShow.Play();
         card.transform.rotation = finalRotation;
         cardState = 3;
     }
 
     public IEnumerator RotateOverTime(Quaternion originalRotation, Quaternion finalRotation, float duration, GameObject card)
     {
+        
         yield return new WaitForSeconds(0.5f);
         if (duration > 0f)
         {
@@ -103,6 +108,7 @@ public class CardRotate : MonoBehaviour
                 yield return null;
             }
         }
+        CardSlideHide.Play();
         card.transform.rotation = finalRotation;
         cardState = 1;
     }

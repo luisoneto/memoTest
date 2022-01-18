@@ -5,6 +5,7 @@ using UnityEngine;
 public class CelebrationStarter : MonoBehaviour
 {
     // puntos maximos 34
+    public AudioSource CelebrationEffect;
     public ParticleSystem Fireworks;
     public ParticleSystem Confetti;
     public GameObject Ballon;
@@ -22,6 +23,7 @@ public class CelebrationStarter : MonoBehaviour
 
     public void Celebrations()
     {
+        CelebrationEffect.Play();
         switch(GameObject.Find("ParticleSystemC").GetComponent<Intensity>().intensity)
             {
             case 1:
